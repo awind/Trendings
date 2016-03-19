@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">GitHubTrending</string>
+    <string name="action_settings">Settings</string>
+    <string name="acion_add_language">Add Language</string>
+    <string name="action_help">Help &amp; Feedback</string>
+
+    <string name="repo_title">%1$s/</string>
+
+    <string name="activity_favorite_title">Favorite</string>
+    <string name="action_about">About</string>
+
+</resources>

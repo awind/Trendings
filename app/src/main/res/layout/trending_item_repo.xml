@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/card_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    card_view:cardElevation="4dp"
+    card_view:cardCornerRadius="2dp">
+
+
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+       <LinearLayout
+           android:layout_marginTop="16dp"
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <TextView
+               android:id="@+id/title"
+               android:textColor="@color/text_color_blue"
+               android:paddingLeft="16dp"
+               android:paddingRight="16dp"
+               android:textSize="17sp"
+               android:gravity="center_vertical"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"/>
+
+           <ImageView
+               android:id="@+id/language"
+               android:layout_marginRight="28dp"
+               android:layout_width="24dp"
+               android:layout_height="24dp"/>
+
+       </LinearLayout>
+
+       <TextView
+           android:id="@+id/description"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:textSize="12sp"
+           android:textColor="@color/text_color_description"
+           android:paddingLeft="16dp"
+           android:paddingRight="16dp"
+           android:layout_marginTop="12dp"/>
+
+
+       <RelativeLayout
+           android:layout_marginTop="20dp"
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <TextView
+               android:id="@+id/built"
+               android:textSize="12sp"
+               android:textColor="@color/text_color_gray"
+               android:text="Built by"
+               android:paddingLeft="16sp"
+               android:gravity="bottom"
+               android:layout_centerVertical="true"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"/>
+
+
+           <ImageView
+               android:id="@+id/avatar"
+               android:layout_centerVertical="true"
+               android:layout_toRightOf="@+id/built"
+               android:layout_marginLeft="4dp"
+               android:layout_width="24dp"
+               android:layout_height="24dp"/>
+
+           <TextView
+               android:id="@+id/star"
+               android:gravity="center_vertical"
+               android:textSize="12sp"
+               android:textColor="@color/text_color_gray"
+               android:layout_alignParentRight="true"
+               android:layout_marginRight="28dp"
+               android:layout_centerVertical="true"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"/>
+
+       </RelativeLayout>
+
+
+       <RelativeLayout
+           android:layout_marginTop="20dp"
+           android:layout_marginBottom="16dp"
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <TextView
+               android:id="@+id/share"
+               android:textSize="14sp"
+               android:textColor="@color/text_color_black"
+               android:text="SHARE"
+               android:paddingLeft="16dp"
+               android:textStyle="bold"
+               android:gravity="center_vertical"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"/>
+
+
+           <TextView
+               android:id="@+id/favorite"
+               android:textSize="14sp"
+               android:textColor="@color/text_color_black"
+               android:text="FAVORITE"
+               android:textStyle="bold"
+               android:layout_alignParentRight="true"
+               android:layout_marginRight="28dp"
+               android:gravity="center_vertical"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"/>
+
+       </RelativeLayout>
+
+
+   </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
