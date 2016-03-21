@@ -15,6 +15,8 @@
  */
 package com.phillipsong.gittrending.ui.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,12 +29,14 @@ import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.models.Repo;
 import com.phillipsong.gittrending.ui.adapter.RepoAdapter;
 import com.phillipsong.gittrending.ui.misc.OnRepoItemClickListener;
+import com.phillipsong.gittrending.utils.Constants;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class FavoriteActivity extends BaseActivity implements OnRepoItemClickListener {
 
@@ -82,16 +86,52 @@ public class FavoriteActivity extends BaseActivity implements OnRepoItemClickLis
 
     @Override
     public void onItemClick(int position) {
-
+        if (mRepoList == null || mRepoList.size() == 0) {
+            return;
+        }
+        Repo repo = mRepoList.get(position);
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(Constants.GITHUB_BASE_URL + repo.getUrl()));
+        startActivity(i);
     }
 
     @Override
     public void onShareClick(int position) {
-
+        if (mRepoList == null || mRepoList.size() == 0) {
+            return;
+        }
+        Repo repo = mRepoList.get(position);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, Constants.GITHUB_BASE_URL + repo.getUrl());
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
     }
 
     @Override
     public void onFavoriteClick(int position) {
+        if (mRepoList == null || mRepoList.size() == 0) {
+            return;
+        }
 
+        Repo repo = mRepoList.get(position);
+        mRealm.where(Repo.class).equalTo("url", repo.getUrl()).findAllAsync()
+                .asObservable()
+                .filter(RealmResults::isLoaded)
+                .first()
+                .subscribe(repos -> {
+                    if (repos.size() > 0) {
+                        repo.setIsFavorited(false);
+                        mRealm.beginTransaction();
+                        repos.removeLast();
+                        mRealm.commitTransaction();
+                    } else if (repos.size() == 0) {
+                        repo.setIsFavorited(true);
+                        mRealm.beginTransaction();
+                        mRealm.copyToRealm(repo);
+                        mRealm.commitTransaction();
+                    }
+                    mRepoAdapter.notifyDataSetChanged();
+                });
     }
 }

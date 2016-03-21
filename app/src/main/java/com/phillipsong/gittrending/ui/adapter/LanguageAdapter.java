@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.data.models.Language;
+import com.phillipsong.gittrending.ui.misc.OnLanguageClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -44,10 +45,12 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
 
     private Context mContext;
     private List<Language> mLanguages;
+    private OnLanguageClickListener mListener;
 
-    public LanguageAdapter(Context context, List<Language> languages) {
+    public LanguageAdapter(Context context, List<Language> languages, OnLanguageClickListener listener) {
         this.mContext = context;
         this.mLanguages = languages;
+        this.mListener = listener;
     }
 
     @Override
@@ -68,10 +71,16 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
                 .centerInside()
                 .fit()
                 .into(holder.mIcon);
+        holder.itemView.setOnClickListener(view -> {
+            if (mListener != null) {
+                mListener.onItemClick(position);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return mLanguages == null ? 0 : mLanguages.size();
     }
+
 }

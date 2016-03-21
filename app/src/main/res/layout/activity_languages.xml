@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true">
 
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout
         android:id="@+id/refresher"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
 
         </android.support.v7.widget.RecyclerView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout>
 
 
     <android.support.design.widget.AppBarLayout

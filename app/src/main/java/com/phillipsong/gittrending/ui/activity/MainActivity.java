@@ -38,10 +38,14 @@ import com.phillipsong.gittrending.AppComponent;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.api.TrendingService;
+import com.phillipsong.gittrending.data.models.Language;
 import com.phillipsong.gittrending.ui.adapter.ViewPagerAdapter;
 import com.phillipsong.gittrending.ui.fragment.RepoFragment;
 
 import javax.inject.Inject;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class MainActivity extends BaseActivity {
 
@@ -51,6 +55,8 @@ public class MainActivity extends BaseActivity {
     TrendingApplication mContext;
     @Inject
     TrendingService mTrendingApi;
+    @Inject
+    Realm mRealm;
 
     private Toolbar mToolbar;
     private ViewPager mViewPager;
@@ -144,6 +150,14 @@ public class MainActivity extends BaseActivity {
         mPagerAdapter.addFragment(RepoFragment.newInstance("all", "daily"), "All");
         mPagerAdapter.addFragment(RepoFragment.newInstance("java", "daily"), "Java");
         mPagerAdapter.addFragment(RepoFragment.newInstance("swift", "daily"), "Swift");
+        RealmResults<Language> languages = mRealm.where(Language.class).findAll();
+        if (languages.size() > 0) {
+            for (Language language : languages) {
+                mPagerAdapter.addFragment(RepoFragment.newInstance(
+                        language.getName().toLowerCase(), mSince), language.getName());
+            }
+        }
+
         mViewPager.setAdapter(mPagerAdapter);
     }
 

@@ -30,6 +30,7 @@ import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.data.models.Repo;
 import com.phillipsong.gittrending.ui.misc.OnRepoItemClickListener;
 import com.phillipsong.gittrending.ui.widget.AvatarContainer;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -70,6 +71,13 @@ public class RepoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTitle.setText(String.format(context.getString(R.string.repo_title),
                     repo.getOwner()));
             mTitle.append(name);
+            String languagePic = String.format(context.getString(R.string.image_base_url),
+                    repo.getLanguage().toLowerCase());
+            Picasso.with(context)
+                    .load(languagePic)
+                    .centerInside()
+                    .fit()
+                    .into(mLanguage);
             mDescription.setText(repo.getDescription());
             mAvatar.setImageUrls(repo.getContributors());
             mStar.setText(repo.getStar());

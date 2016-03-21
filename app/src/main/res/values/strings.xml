@@ -11,4 +11,6 @@
     <string name="activity_languages_title">Languages</string>
     <string name="activity_repo_favorited">Favorited</string>
 
+    <string name="image_base_url">http://7xs2pw.com1.z0.glb.clouddn.com/%1$s.png</string>
+
 </resources>

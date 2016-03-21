@@ -162,10 +162,12 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                 .first()
                 .subscribe(repos -> {
                     if (repos.size() > 0) {
+                        repo.setIsFavorited(false);
                         mRealm.beginTransaction();
                         repos.removeLast();
                         mRealm.commitTransaction();
                     } else if (repos.size() == 0) {
+                        repo.setIsFavorited(true);
                         mRealm.beginTransaction();
                         mRealm.copyToRealm(repo);
                         mRealm.commitTransaction();

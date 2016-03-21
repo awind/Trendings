@@ -16,7 +16,6 @@
 package com.phillipsong.gittrending.ui.activity;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,24 +26,38 @@ import com.phillipsong.gittrending.AppComponent;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.api.TrendingService;
+import com.phillipsong.gittrending.data.models.Language;
+import com.phillipsong.gittrending.data.models.Support;
 import com.phillipsong.gittrending.ui.adapter.LanguageAdapter;
+import com.phillipsong.gittrending.ui.misc.OnLanguageClickListener;
+import com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class LanguagesActivity extends BaseActivity {
+public class LanguagesActivity extends BaseActivity implements OnLanguageClickListener {
 
     @Inject
     TrendingApplication mContext;
     @Inject
     TrendingService mTrendingApi;
+    @Inject
+    Realm mRealm;
 
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private PSwipeRefreshLayout mSwipeRefreshLayout;
     private LanguageAdapter mLanguageAdapter;
+
+    private List<Language> mLanguageList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,15 +84,25 @@ public class LanguagesActivity extends BaseActivity {
         RxToolbar.navigationClicks(mToolbar)
                 .subscribe(aVoid -> finish());
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresher);
+        mSwipeRefreshLayout = (PSwipeRefreshLayout) findViewById(R.id.refresher);
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
                 .compose(bindToLifecycle())
-                .subscribe(aVoid -> updateData());
+                .observeOn(Schedulers.io())
+                .flatMap(aVoid -> mTrendingApi.getSupport())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(aVoid -> mSwipeRefreshLayout.setRefreshing(false))
+                .retry()
+                .flatMap(support -> checkLanguage(support))
+                .subscribe(support -> {
+                    mLanguageList.clear();
+                    mLanguageList.addAll(support.getItems());
+                    mLanguageAdapter.notifyDataSetChanged();
+                });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(layoutManager);
-        mLanguageAdapter = new LanguageAdapter(mContext, null);
+        mLanguageAdapter = new LanguageAdapter(mContext, mLanguageList, this);
         mRecyclerView.setAdapter(mLanguageAdapter);
     }
 
@@ -92,8 +115,32 @@ public class LanguagesActivity extends BaseActivity {
                 .doOnCompleted(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .doOnError(error -> mSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(support -> {
-                    mLanguageAdapter = new LanguageAdapter(mContext, support.getItems());
-                    mRecyclerView.setAdapter(mLanguageAdapter);
+                    mLanguageList.clear();
+                    mLanguageList.addAll(support.getItems());
+                    mLanguageAdapter.notifyDataSetChanged();
                 });
+    }
+
+    private Observable<Support> checkLanguage(Support support) {
+        for (Language language : support.getItems()) {
+            RealmResults<Language> languages = mRealm.where(Language.class)
+                    .equalTo("name", language.getName()).findAll();
+            if (languages.size() > 0) {
+                language.setIsSelect(true);
+            }
+        }
+        return Observable.just(support);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        if (mLanguageList == null || mLanguageList.size() == 0) {
+            return;
+        }
+
+        Language language = mLanguageList.get(position);
+        mRealm.beginTransaction();
+        mRealm.copyToRealm(language);
+        mRealm.commitTransaction();
     }
 }
