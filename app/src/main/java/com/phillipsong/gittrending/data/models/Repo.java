@@ -19,16 +19,21 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
 public class Repo extends RealmObject {
 
     private String name;
     private String owner;
     private String star;
+    @PrimaryKey
     private String url;
     private String language;
     private String description;
     private RealmList<Contributor> contributors;
+    @Ignore
+    private boolean isFavorited;
 
     public String getName() {
         return name;
@@ -84,6 +89,14 @@ public class Repo extends RealmObject {
 
     public void setContributors(RealmList<Contributor> contributors) {
         this.contributors = contributors;
+    }
+
+    public boolean isFavorited() {
+        return isFavorited;
+    }
+
+    public void setIsFavorited(boolean isFavorited) {
+        this.isFavorited = isFavorited;
     }
 
     @Override

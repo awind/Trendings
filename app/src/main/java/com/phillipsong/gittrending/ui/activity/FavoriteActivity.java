@@ -26,6 +26,7 @@ import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.models.Repo;
 import com.phillipsong.gittrending.ui.adapter.RepoAdapter;
+import com.phillipsong.gittrending.ui.misc.OnRepoItemClickListener;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 
-public class FavoriteActivity extends BaseActivity {
+public class FavoriteActivity extends BaseActivity implements OnRepoItemClickListener {
 
     @Inject
     TrendingApplication mContext;
@@ -75,8 +76,22 @@ public class FavoriteActivity extends BaseActivity {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(manager);
         mRepoList = mRealm.where(Repo.class).findAll();
-        mRepoAdapter = new RepoAdapter(mRepoList, this, mRealm);
+        mRepoAdapter = new RepoAdapter(mContext, mRepoList, this);
         mRecyclerView.setAdapter(mRepoAdapter);
     }
 
+    @Override
+    public void onItemClick(int position) {
+
+    }
+
+    @Override
+    public void onShareClick(int position) {
+
+    }
+
+    @Override
+    public void onFavoriteClick(int position) {
+
+    }
 }

@@ -34,6 +34,7 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"/>
 
+
            <ImageView
                android:id="@+id/language"
                android:layout_marginRight="28dp"
@@ -71,12 +72,13 @@
                android:layout_height="wrap_content"/>
 
 
-           <ImageView
+           <com.phillipsong.gittrending.ui.widget.AvatarContainer
                android:id="@+id/avatar"
+               android:orientation="horizontal"
                android:layout_centerVertical="true"
                android:layout_toRightOf="@+id/built"
                android:layout_marginLeft="4dp"
-               android:layout_width="24dp"
+               android:layout_width="wrap_content"
                android:layout_height="24dp"/>
 
            <TextView
@@ -92,13 +94,19 @@
 
        </RelativeLayout>
 
+       <View
+           android:layout_marginTop="8dp"
+           android:layout_marginLeft="16dp"
+           android:layout_marginRight="16dp"
+           android:background="@color/bg_main"
+           android:layout_width="match_parent"
+           android:layout_height="1dp"/>
 
        <RelativeLayout
-           android:layout_marginTop="20dp"
-           android:layout_marginBottom="16dp"
+           android:layout_marginBottom="4dp"
            android:orientation="horizontal"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content">
+           android:layout_height="48dp">
 
            <TextView
                android:id="@+id/share"
@@ -109,7 +117,7 @@
                android:textStyle="bold"
                android:gravity="center_vertical"
                android:layout_width="wrap_content"
-               android:layout_height="wrap_content"/>
+               android:layout_height="match_parent"/>
 
 
            <TextView
@@ -122,7 +130,7 @@
                android:layout_marginRight="28dp"
                android:gravity="center_vertical"
                android:layout_width="wrap_content"
-               android:layout_height="wrap_content"/>
+               android:layout_height="match_parent"/>
 
        </RelativeLayout>
 

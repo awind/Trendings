@@ -8,5 +8,7 @@
 
     <string name="activity_favorite_title">Favorite</string>
     <string name="action_about">About</string>
+    <string name="activity_languages_title">Languages</string>
+    <string name="activity_repo_favorited">Favorited</string>
 
 </resources>

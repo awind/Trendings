@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.data.api;
+package com.phillipsong.gittrending.ui.activity;
 
-import com.phillipsong.gittrending.data.models.Support;
-import com.phillipsong.gittrending.data.models.Trending;
+import dagger.Module;
+import dagger.Provides;
 
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import rx.Observable;
+@Module
+public class LanguagesActivityModule {
 
-public interface TrendingService {
+    private LanguagesActivity mLanguagesActivity;
 
-    @GET("/v2")
-    Observable<Trending> getTrending(@Query("language") String language, @Query("since") String since);
+    public LanguagesActivityModule(LanguagesActivity languagesActivity) {
+        this.mLanguagesActivity = languagesActivity;
+    }
 
-    @GET("/v2/support")
-    Observable<Support> getSupport();
+    @Provides
+    public LanguagesActivity provideLanguagesActivity() {
+        return mLanguagesActivity;
+    }
 }

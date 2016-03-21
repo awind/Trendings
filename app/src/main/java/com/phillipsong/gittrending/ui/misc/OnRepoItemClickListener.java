@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.data.api;
+package com.phillipsong.gittrending.ui.misc;
 
-import com.phillipsong.gittrending.data.models.Support;
-import com.phillipsong.gittrending.data.models.Trending;
 
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import rx.Observable;
+public interface OnRepoItemClickListener {
 
-public interface TrendingService {
+    void onShareClick(int position);
 
-    @GET("/v2")
-    Observable<Trending> getTrending(@Query("language") String language, @Query("since") String since);
+    void onFavoriteClick(int position);
 
-    @GET("/v2/support")
-    Observable<Support> getSupport();
+    void onItemClick(int position);
 }

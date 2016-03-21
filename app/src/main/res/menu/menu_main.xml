@@ -4,12 +4,6 @@
       tools:context=".ui.activity.MainActivity">
 
     <item
-        android:id="@+id/action_add"
-        android:orderInCategory="100"
-        android:title="@string/acion_add_language"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/action_help"
         android:orderInCategory="100"
         android:title="@string/action_help"

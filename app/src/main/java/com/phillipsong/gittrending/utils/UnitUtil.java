@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.data.api;
+package com.phillipsong.gittrending.utils;
 
-import com.phillipsong.gittrending.data.models.Support;
-import com.phillipsong.gittrending.data.models.Trending;
+import android.content.Context;
+import android.util.TypedValue;
 
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import rx.Observable;
+public class UnitUtil {
+    public static int dpToPx(Context context, int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
 
-public interface TrendingService {
-
-    @GET("/v2")
-    Observable<Trending> getTrending(@Query("language") String language, @Query("since") String since);
-
-    @GET("/v2/support")
-    Observable<Support> getSupport();
 }

@@ -22,6 +22,8 @@
         </activity>
 
         <activity android:name=".ui.activity.FavoriteActivity"/>
+
+        <activity android:name=".ui.activity.LanguagesActivity"/>
     </application>
 
 </manifest>

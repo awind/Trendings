@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:orientation="vertical"
+             android:background="@color/bg_main"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout
         android:id="@+id/refresher"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,6 +16,6 @@
             android:layout_height="match_parent">
         </android.support.v7.widget.RecyclerView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout>
 
 </FrameLayout>

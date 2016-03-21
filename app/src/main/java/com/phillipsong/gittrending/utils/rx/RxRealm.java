@@ -13,20 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.data.api;
+package com.phillipsong.gittrending.utils.rx;
 
-import com.phillipsong.gittrending.data.models.Support;
-import com.phillipsong.gittrending.data.models.Trending;
+public class RxRealm {
 
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import rx.Observable;
-
-public interface TrendingService {
-
-    @GET("/v2")
-    Observable<Trending> getTrending(@Query("language") String language, @Query("since") String since);
-
-    @GET("/v2/support")
-    Observable<Support> getSupport();
+//    public <T> Observable<Boolean> copyToRealm(T object, ) {
+//
+//    }
 }
