@@ -16,9 +16,10 @@
     <string name="about">About</string>
     <string name="version" formatted="false">Version %s (%s)</string>
     <string name="fork_me_on_github">Fork me on GitHub</string>
-    <string name="support_us">About Trendings</string>
-    <string name="support_us_text"><![CDATA[
-        <p>Elegant client for Github Trending.</p>
+    <string name="about_trendings">About Trendings</string>
+    <string name="about_trendings_text"><![CDATA[
+        <p>Elegant client for Github Trend with Material Design. </p>
+        <p>This app is also open source in Github.</p>
 
     ]]>
     </string>

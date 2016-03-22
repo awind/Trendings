@@ -48,7 +48,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public void addFragment(Fragment fragment, String title) {
         mFragmentList.add(fragment);
         mFragmentTitleList.add(title);
-        notifyDataSetChanged();
     }
 
     public void clearFragmentList() {
@@ -59,7 +58,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         ft.commit();
         mFragmentTitleList.clear();
         mFragmentList.clear();
-        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     @Override

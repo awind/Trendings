@@ -20,7 +20,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -68,7 +67,6 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
     private RepoAdapter mRepoAdapter;
     private List<Repo> mRepoList;
 
-    private Handler mHandler = new Handler();
     @Inject
     TrendingApplication mContext;
     @Inject

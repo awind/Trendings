@@ -15,6 +15,8 @@
  */
 package com.phillipsong.gittrending.ui.fragment;
 
+import com.phillipsong.gittrending.ui.misc.PerFragment;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -28,6 +30,7 @@ public class RepoFragmentModule {
     }
 
     @Provides
+    @PerFragment
     RepoFragment provideRepoFragment() {
         return mRepoFragment;
     }

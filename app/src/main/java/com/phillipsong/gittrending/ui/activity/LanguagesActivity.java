@@ -15,6 +15,7 @@
  */
 package com.phillipsong.gittrending.ui.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -85,6 +86,7 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
                 .subscribe(aVoid -> onBackPressed());
 
         mSwipeRefreshLayout = (PSwipeRefreshLayout) findViewById(R.id.refresher);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
                 .compose(bindToLifecycle())
                 .observeOn(Schedulers.io())
@@ -155,9 +157,4 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
         mLanguageAdapter.notifyItemChanged(position);
     }
 
-    @Override
-    public void onBackPressed() {
-        setResult(RESULT_OK);
-        super.onBackPressed();
-    }
 }

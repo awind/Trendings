@@ -53,7 +53,8 @@ public class AboutActivity extends BaseActivity {
         mWebView = (WebView) findViewById(R.id.webview);
         final String template = getString(R.string.about_page)
                 .replace("{{fork_me_on_github}}", getString(R.string.fork_me_on_github))
-                .replace("{{about_trendings_text}}", getString(R.string.support_us_text))
+                .replace("{{about_trendings}}", getString(R.string.about))
+                .replace("{{about_trendings_text}}", getString(R.string.about_trendings_text))
                 .replace("{{libraries_used}}", getString(R.string.libraries_used));
 
         mWebView.loadData(template, "text/html; charset=utf-8", null);
