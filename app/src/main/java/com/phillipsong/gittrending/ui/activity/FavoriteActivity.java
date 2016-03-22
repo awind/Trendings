@@ -22,6 +22,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
+import com.crashlytics.android.answers.CustomEvent;
+import com.crashlytics.android.answers.ShareEvent;
 import com.jakewharton.rxbinding.support.v7.widget.RxToolbar;
 import com.phillipsong.gittrending.AppComponent;
 import com.phillipsong.gittrending.R;
@@ -40,6 +44,7 @@ import io.realm.RealmResults;
 
 public class FavoriteActivity extends BaseActivity implements OnRepoItemClickListener {
 
+    private static final String TAG = "FavoriteActivity";
     @Inject
     TrendingApplication mContext;
     @Inject
@@ -93,6 +98,9 @@ public class FavoriteActivity extends BaseActivity implements OnRepoItemClickLis
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(Constants.GITHUB_BASE_URL + repo.getUrl()));
         startActivity(i);
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName(repo.getUrl())
+                .putContentType(TAG));
     }
 
     @Override
@@ -106,6 +114,10 @@ public class FavoriteActivity extends BaseActivity implements OnRepoItemClickLis
         sendIntent.putExtra(Intent.EXTRA_TEXT, Constants.GITHUB_BASE_URL + repo.getUrl());
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
+
+        Answers.getInstance().logShare(new ShareEvent()
+                .putContentType(TAG)
+                .putContentName(repo.getUrl()));
     }
 
     @Override
@@ -121,17 +133,19 @@ public class FavoriteActivity extends BaseActivity implements OnRepoItemClickLis
                 .first()
                 .subscribe(repos -> {
                     if (repos.size() > 0) {
-                        repo.setIsFavorited(false);
                         mRealm.beginTransaction();
                         repos.removeLast();
                         mRealm.commitTransaction();
                     } else if (repos.size() == 0) {
-                        repo.setIsFavorited(true);
                         mRealm.beginTransaction();
+                        repo.setIsFavorited(true);
                         mRealm.copyToRealm(repo);
                         mRealm.commitTransaction();
                     }
                     mRepoAdapter.notifyDataSetChanged();
                 });
+
+        Answers.getInstance().logCustom(new CustomEvent("Favorite")
+                .putCustomAttribute("name", repo.getUrl()));
     }
 }

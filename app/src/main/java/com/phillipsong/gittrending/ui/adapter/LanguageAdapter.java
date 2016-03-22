@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.phillipsong.gittrending.R;
@@ -35,11 +36,13 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
     public static class LanguageViewHolder extends RecyclerView.ViewHolder {
         private ImageView mIcon;
         private TextView mName;
+        private RelativeLayout mSelectLayer;
 
         public LanguageViewHolder(View view) {
             super(view);
             mIcon = (ImageView) view.findViewById(R.id.language_icon);
             mName = (TextView) view.findViewById(R.id.language_name);
+            mSelectLayer = (RelativeLayout) view.findViewById(R.id.select_layer);
         }
     }
 
@@ -68,9 +71,15 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
         holder.mName.setText(language.getName());
         Picasso.with(mContext)
                 .load(language.getIcon())
+                .error(R.mipmap.ic_lang)
                 .centerInside()
                 .fit()
                 .into(holder.mIcon);
+        if (language.isSelect()) {
+            holder.mSelectLayer.setVisibility(View.VISIBLE);
+        } else {
+            holder.mSelectLayer.setVisibility(View.GONE);
+        }
         holder.itemView.setOnClickListener(view -> {
             if (mListener != null) {
                 mListener.onItemClick(position);

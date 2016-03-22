@@ -19,6 +19,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.phillipsong.gittrending.data.api.ApiModule;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 public class TrendingApplication extends Application {
 
@@ -31,6 +33,11 @@ public class TrendingApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        final Fabric fabric = new Fabric.Builder(this)
+                .kits(new Crashlytics())
+                .debuggable(true)
+                .build();
+        Fabric.with(fabric);
 
         // Dagger
         mAppComponent = DaggerAppComponent.builder()

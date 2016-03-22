@@ -13,11 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.utils.rx;
+package com.phillipsong.gittrending.ui.activity;
 
-public class RxRealm {
+import javax.inject.Singleton;
 
-//    public <T> Observable<Boolean> copyToRealm(T object, ) {
-//
-//    }
+import dagger.Module;
+import dagger.Provides;
+
+@Module
+public class AboutActivityModule {
+
+    private AboutActivity mAboutActivity;
+
+    public AboutActivityModule(AboutActivity aboutActivity) {
+        mAboutActivity = aboutActivity;
+    }
+
+    @Singleton
+    @Provides
+    public AboutActivity provideAboutActivity() {
+        return mAboutActivity;
+    }
 }

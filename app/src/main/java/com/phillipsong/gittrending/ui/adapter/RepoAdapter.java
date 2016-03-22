@@ -75,6 +75,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     repo.getLanguage().toLowerCase());
             Picasso.with(context)
                     .load(languagePic)
+                    .error(R.mipmap.ic_lang)
                     .centerInside()
                     .fit()
                     .into(mLanguage);
@@ -84,6 +85,8 @@ public class RepoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             if (repo.isFavorited()) {
                 mFavorite.setText(R.string.activity_repo_favorited);
+            } else {
+                mFavorite.setText(R.string.activity_favorite_title);
             }
 
             mShare.setOnClickListener(v -> {

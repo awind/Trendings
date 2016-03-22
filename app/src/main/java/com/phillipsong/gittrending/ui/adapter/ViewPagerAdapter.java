@@ -18,6 +18,7 @@ package com.phillipsong.gittrending.ui.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> mFragmentList = new ArrayList<>();
     private List<String> mFragmentTitleList = new ArrayList<>();
 
+    private FragmentManager mFragmentManager;
+
     public ViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
+        mFragmentManager = fragmentManager;
     }
 
     @Override
@@ -44,6 +48,18 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public void addFragment(Fragment fragment, String title) {
         mFragmentList.add(fragment);
         mFragmentTitleList.add(title);
+        notifyDataSetChanged();
+    }
+
+    public void clearFragmentList() {
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        for (Fragment fragment : mFragmentList) {
+            ft.remove(fragment);
+        }
+        ft.commit();
+        mFragmentTitleList.clear();
+        mFragmentList.clear();
+        notifyDataSetChanged();
     }
 
     @Override

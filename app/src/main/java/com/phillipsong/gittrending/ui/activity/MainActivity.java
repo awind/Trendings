@@ -16,6 +16,7 @@
 package com.phillipsong.gittrending.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -51,19 +52,24 @@ public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
 
+    private static final String IS_USED = "used";
+    private static final int REQUEST_LANGUAGE = 10;
+
     @Inject
     TrendingApplication mContext;
     @Inject
     TrendingService mTrendingApi;
     @Inject
     Realm mRealm;
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     private Toolbar mToolbar;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ViewPagerAdapter mPagerAdapter;
 
-    private String mSince;
+    private String mSince = "daily";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,11 @@ public class MainActivity extends BaseActivity {
 //                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 //                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        boolean isUsed = mSharedPreferences.getBoolean(IS_USED, false);
+        if (!isUsed) {
+            initDefaultTab();
+            mSharedPreferences.edit().putBoolean(IS_USED, true).apply();
+        }
         initViews();
     }
 
@@ -84,12 +95,24 @@ public class MainActivity extends BaseActivity {
                 .inject(this);
     }
 
+    private void initDefaultTab() {
+        String[] languages = {"all", "java", "swift", "c", "cpp", "php", "javascript"};
+        for (String lang : languages) {
+            Language language = new Language(lang, mSince, true);
+            mRealm.beginTransaction();
+            mRealm.copyToRealm(language);
+            mRealm.commitTransaction();
+        }
+    }
+
     private void initViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
         setupViewPager();
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -114,13 +137,13 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
-                    case 0: // daily
+                    case 0:
                         mSince = "daily";
                         break;
-                    case 1: // weekly
+                    case 1:
                         mSince = "weekly";
                         break;
-                    case 2: // monthly
+                    case 2:
                         mSince = "monthly";
                         break;
 
@@ -146,19 +169,20 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setupViewPager() {
-        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mPagerAdapter.addFragment(RepoFragment.newInstance("all", "daily"), "All");
-        mPagerAdapter.addFragment(RepoFragment.newInstance("java", "daily"), "Java");
-        mPagerAdapter.addFragment(RepoFragment.newInstance("swift", "daily"), "Swift");
+        mPagerAdapter.clearFragmentList();
         RealmResults<Language> languages = mRealm.where(Language.class).findAll();
         if (languages.size() > 0) {
             for (Language language : languages) {
                 mPagerAdapter.addFragment(RepoFragment.newInstance(
                         language.getName().toLowerCase(), mSince), language.getName());
             }
+        } else {
+            mPagerAdapter.addFragment(RepoFragment.newInstance(
+                    "all", mSince), "All");
+            mPagerAdapter.addFragment(RepoFragment.newInstance(
+                    "java", mSince), "Java");
         }
-
-        mViewPager.setAdapter(mPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
@@ -174,8 +198,11 @@ public class MainActivity extends BaseActivity {
 
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, LanguagesActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_LANGUAGE);
             return true;
+        } else if (id == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -206,7 +233,7 @@ public class MainActivity extends BaseActivity {
                     getLayoutInflater().inflate(R.layout.toolbar_spinner_item_actionbar, parent, false);
 
             TextView textView = (TextView) view.findViewById(android.R.id.text1);
-            textView.setText("Trending " + getItem(position));
+            textView.setText("Trendings " + getItem(position));
             return view;
         }
 
@@ -220,6 +247,14 @@ public class MainActivity extends BaseActivity {
             textView.setText(getItem(position));
 
             return view;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LANGUAGE && resultCode == RESULT_OK) {
+            setupViewPager();
         }
     }
 }

@@ -24,10 +24,15 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
+import com.crashlytics.android.answers.CustomEvent;
+import com.crashlytics.android.answers.ShareEvent;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 import com.phillipsong.gittrending.AppComponent;
 import com.phillipsong.gittrending.R;
@@ -146,6 +151,8 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                     mRepoList.clear();
                     mRepoList.addAll(trending.getItems());
                     mRepoAdapter.notifyDataSetChanged();
+                }, error->{
+                    Log.d(TAG, "updateData: " + error.getMessage());
                 });
     }
 
@@ -162,18 +169,21 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                 .first()
                 .subscribe(repos -> {
                     if (repos.size() > 0) {
-                        repo.setIsFavorited(false);
                         mRealm.beginTransaction();
                         repos.removeLast();
                         mRealm.commitTransaction();
                     } else if (repos.size() == 0) {
-                        repo.setIsFavorited(true);
                         mRealm.beginTransaction();
+                        repo.setIsFavorited(true);
                         mRealm.copyToRealm(repo);
                         mRealm.commitTransaction();
                     }
                     mRepoAdapter.notifyDataSetChanged();
                 });
+
+        Answers.getInstance().logCustom(new CustomEvent("Favorite")
+                .putCustomAttribute("name", repo.getUrl())
+                .putCustomAttribute("type", mLanguage));
     }
 
     @Override
@@ -187,6 +197,11 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
         sendIntent.putExtra(Intent.EXTRA_TEXT, Constants.GITHUB_BASE_URL + repo.getUrl());
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
+
+        Answers.getInstance().logShare(new ShareEvent()
+                .putContentType(TAG)
+                .putContentId(mLanguage)
+                .putContentName(repo.getUrl()));
     }
 
     @Override
@@ -198,9 +213,16 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(Constants.GITHUB_BASE_URL + repo.getUrl()));
         startActivity(i);
+
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName(repo.getUrl())
+                .putContentType(TAG));
     }
 
     private Observable<Trending> checkFavorite(Trending trending) {
+        if (trending == null) {
+            return Observable.just(null);
+        }
         for (Repo repo : trending.getItems()) {
             RealmResults<Repo> repos = mRealm.where(Repo.class)
                     .equalTo("url", repo.getUrl()).findAll();

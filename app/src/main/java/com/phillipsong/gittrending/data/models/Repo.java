@@ -19,7 +19,6 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 
 public class Repo extends RealmObject {
@@ -32,7 +31,6 @@ public class Repo extends RealmObject {
     private String language;
     private String description;
     private RealmList<Contributor> contributors;
-    @Ignore
     private boolean isFavorited;
 
     public String getName() {

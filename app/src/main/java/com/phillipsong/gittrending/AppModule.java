@@ -15,6 +15,9 @@
  */
 package com.phillipsong.gittrending;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -30,6 +33,8 @@ public class AppModule {
 
     private Realm mRealm;
 
+    private SharedPreferences mSharedPreferences;
+
     public AppModule(TrendingApplication application) {
         this.mApplication = application;
 
@@ -37,6 +42,8 @@ public class AppModule {
                 .rxFactory(new RealmObservableFactory())
                 .build();
         mRealm = Realm.getInstance(realmConfig);
+
+        mSharedPreferences = mApplication.getSharedPreferences("app", Context.MODE_PRIVATE);
     }
 
     @Provides
@@ -51,6 +58,11 @@ public class AppModule {
         return mRealm;
     }
 
+    @Singleton
+    @Provides
+    public SharedPreferences provideSharedPreference() {
+        return mSharedPreferences;
+    }
 
 
 }

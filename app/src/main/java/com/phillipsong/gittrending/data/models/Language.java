@@ -16,15 +16,25 @@
 package com.phillipsong.gittrending.data.models;
 
 import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
 public class Language extends RealmObject {
 
+    @PrimaryKey
     private String name;
     private String icon;
 
-    @Ignore
     private boolean isSelect;
+
+    public Language() {
+
+    }
+
+    public Language(String name, String icon, boolean isSelect) {
+        this.name = name;
+        this.icon = icon;
+        this.isSelect = isSelect;
+    }
 
     public String getName() {
         return name;

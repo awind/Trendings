@@ -82,7 +82,7 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RxToolbar.navigationClicks(mToolbar)
-                .subscribe(aVoid -> finish());
+                .subscribe(aVoid -> onBackPressed());
 
         mSwipeRefreshLayout = (PSwipeRefreshLayout) findViewById(R.id.refresher);
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
@@ -114,10 +114,12 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
                 .doOnSubscribe(() -> mSwipeRefreshLayout.setRefreshing(true))
                 .doOnCompleted(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .doOnError(error -> mSwipeRefreshLayout.setRefreshing(false))
+                .flatMap(support -> checkLanguage(support))
                 .subscribe(support -> {
                     mLanguageList.clear();
                     mLanguageList.addAll(support.getItems());
                     mLanguageAdapter.notifyDataSetChanged();
+                }, error -> {
                 });
     }
 
@@ -139,8 +141,23 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
         }
 
         Language language = mLanguageList.get(position);
+        RealmResults<Language> languages = mRealm.where(Language.class)
+                .equalTo("name", language.getName()).findAll();
         mRealm.beginTransaction();
-        mRealm.copyToRealm(language);
+        if (languages.size() > 0) {
+            language.setIsSelect(false);
+            languages.removeLast();
+        } else {
+            language.setIsSelect(true);
+            mRealm.copyToRealm(language);
+        }
         mRealm.commitTransaction();
+        mLanguageAdapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 }
