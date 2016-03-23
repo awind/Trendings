@@ -27,10 +27,12 @@ import com.crashlytics.android.answers.ContentViewEvent;
 import com.crashlytics.android.answers.CustomEvent;
 import com.crashlytics.android.answers.ShareEvent;
 import com.jakewharton.rxbinding.support.v7.widget.RxToolbar;
-import com.phillipsong.gittrending.AppComponent;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.models.Repo;
+import com.phillipsong.gittrending.inject.components.AppComponent;
+import com.phillipsong.gittrending.inject.components.DaggerFavoriteActivityComponent;
+import com.phillipsong.gittrending.inject.modules.FavoriteActivityModule;
 import com.phillipsong.gittrending.ui.adapter.RepoAdapter;
 import com.phillipsong.gittrending.ui.misc.OnRepoItemClickListener;
 import com.phillipsong.gittrending.utils.Constants;
@@ -75,7 +77,7 @@ public class FavoriteActivity extends BaseActivity implements OnRepoItemClickLis
 
     private void initViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle(R.string.activity_favorite_title);
+        mToolbar.setTitle(R.string.repo_item_liked);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RxToolbar.navigationClicks(mToolbar)

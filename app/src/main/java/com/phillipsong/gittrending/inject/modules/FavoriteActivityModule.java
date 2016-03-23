@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.ui.activity;
+package com.phillipsong.gittrending.inject.modules;
+
+import com.phillipsong.gittrending.ui.activity.FavoriteActivity;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class LanguagesActivityModule {
+public class FavoriteActivityModule {
 
-    private LanguagesActivity mLanguagesActivity;
+    FavoriteActivity mFavoriteActivity;
 
-    public LanguagesActivityModule(LanguagesActivity languagesActivity) {
-        this.mLanguagesActivity = languagesActivity;
+    public FavoriteActivityModule(FavoriteActivity favoriteActivity) {
+        this.mFavoriteActivity = favoriteActivity;
     }
 
+    @Singleton
     @Provides
-    public LanguagesActivity provideLanguagesActivity() {
-        return mLanguagesActivity;
+    public FavoriteActivity provideFavoriteActivity() {
+        return mFavoriteActivity;
     }
 }

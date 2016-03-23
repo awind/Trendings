@@ -13,25 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.ui.activity;
+package com.phillipsong.gittrending.inject.components;
 
-import javax.inject.Singleton;
+import com.phillipsong.gittrending.inject.modules.RepoFragmentModule;
+import com.phillipsong.gittrending.ui.fragment.RepoFragment;
+import com.phillipsong.gittrending.ui.misc.PerFragment;
 
-import dagger.Module;
-import dagger.Provides;
+import dagger.Component;
 
-@Module
-public class FavoriteActivityModule {
+@PerFragment
+@Component(modules = {RepoFragmentModule.class}, dependencies = {AppComponent.class})
+public interface RepoFragmentComponent extends MainActivityComponent {
 
-    FavoriteActivity mFavoriteActivity;
+    void inject(RepoFragment fragment);
 
-    public FavoriteActivityModule(FavoriteActivity favoriteActivity) {
-        this.mFavoriteActivity = favoriteActivity;
-    }
-
-    @Singleton
-    @Provides
-    public FavoriteActivity provideFavoriteActivity() {
-        return mFavoriteActivity;
-    }
 }

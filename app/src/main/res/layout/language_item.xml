@@ -3,13 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="120dp"
     android:layout_height="54dp"
-    android:layout_marginLeft="4dp"
+    android:layout_marginStart="4dp"
+    android:foreground="?android:attr/selectableItemBackground"
     android:layout_marginTop="8dp">
 
     <LinearLayout
+        android:background="@color/text_color_white"
         android:layout_width="120dp"
         android:layout_height="54dp"
-        android:background="@drawable/bg_card"
         android:orientation="horizontal">
 
         <ImageView
@@ -17,7 +18,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"/>
+            android:layout_marginStart="8dp"/>
 
         <TextView
             android:id="@+id/language_name"
@@ -26,8 +27,8 @@
             android:layout_gravity="center_vertical"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="4dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="4dp"
             android:singleLine="true"
             android:textColor="@color/text_color_gray"
             android:textSize="12sp"/>

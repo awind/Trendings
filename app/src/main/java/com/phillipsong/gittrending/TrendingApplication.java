@@ -20,6 +20,10 @@ import android.content.Context;
 
 import com.phillipsong.gittrending.data.api.ApiModule;
 import com.crashlytics.android.Crashlytics;
+import com.phillipsong.gittrending.inject.components.AppComponent;
+import com.phillipsong.gittrending.inject.components.DaggerAppComponent;
+import com.phillipsong.gittrending.inject.modules.AppModule;
+
 import io.fabric.sdk.android.Fabric;
 
 public class TrendingApplication extends Application {

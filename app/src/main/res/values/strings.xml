@@ -1,19 +1,20 @@
 <resources>
     <string name="app_name">Trendings</string>
-    <string name="action_settings">Settings</string>
-    <string name="acion_add_language">Add Language</string>
-    <string name="action_help">Help &amp; Feedback</string>
 
+    <!-- repo -->
     <string name="repo_title">%1$s/</string>
+    <string name="repo_item_built">Built by</string>
+    <string name="repo_item_share">Share</string>
+    <string name="repo_item_like">Like</string>
+    <string name="repo_item_liked">Liked</string>
 
-    <string name="activity_favorite_title">Like</string>
-    <string name="action_about">About</string>
-    <string name="activity_languages_title">Languages</string>
-    <string name="activity_repo_favorited">Liked</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="about_title">About</string>
+    <string name="languages_title">Languages</string>
 
     <string name="image_base_url">http://7xs2pw.com1.z0.glb.clouddn.com/%1$s.png</string>
 
-    <string name="about">About</string>
     <string name="version" formatted="false">Version %s (%s)</string>
     <string name="fork_me_on_github">Fork me on GitHub</string>
     <string name="about_trendings">About Trendings</string>
@@ -109,5 +110,7 @@
         </body>
     </html>
     ]]></string>
+
+
 
 </resources>

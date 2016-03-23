@@ -20,8 +20,10 @@ import android.support.v7.widget.Toolbar;
 import android.webkit.WebView;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxToolbar;
-import com.phillipsong.gittrending.AppComponent;
 import com.phillipsong.gittrending.R;
+import com.phillipsong.gittrending.inject.components.AppComponent;
+import com.phillipsong.gittrending.inject.components.DaggerAboutActivityComponent;
+import com.phillipsong.gittrending.inject.modules.AboutActivityModule;
 
 public class AboutActivity extends BaseActivity {
 
@@ -53,7 +55,7 @@ public class AboutActivity extends BaseActivity {
         mWebView = (WebView) findViewById(R.id.webview);
         final String template = getString(R.string.about_page)
                 .replace("{{fork_me_on_github}}", getString(R.string.fork_me_on_github))
-                .replace("{{about_trendings}}", getString(R.string.about))
+                .replace("{{about_trendings}}", getString(R.string.about_title))
                 .replace("{{about_trendings_text}}", getString(R.string.about_trendings_text))
                 .replace("{{libraries_used}}", getString(R.string.libraries_used));
 

@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending;
+package com.phillipsong.gittrending.inject.modules;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.phillipsong.gittrending.TrendingApplication;
 
 import javax.inject.Singleton;
 

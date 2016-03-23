@@ -35,11 +35,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
-import com.phillipsong.gittrending.AppComponent;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.api.TrendingService;
 import com.phillipsong.gittrending.data.models.Language;
+import com.phillipsong.gittrending.inject.components.AppComponent;
+import com.phillipsong.gittrending.inject.components.DaggerMainActivityComponent;
+import com.phillipsong.gittrending.inject.modules.MainActivityModule;
 import com.phillipsong.gittrending.ui.adapter.ViewPagerAdapter;
 import com.phillipsong.gittrending.ui.fragment.RepoFragment;
 

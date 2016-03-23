@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.ui.activity;
+package com.phillipsong.gittrending.inject.components;
 
-import com.phillipsong.gittrending.AppComponent;
+import com.phillipsong.gittrending.inject.modules.FavoriteActivityModule;
+import com.phillipsong.gittrending.ui.activity.FavoriteActivity;
 import com.phillipsong.gittrending.ui.misc.ActivityScope;
 
 import dagger.Component;
 
 @ActivityScope
-@Component(modules = {MainActivityModule.class}, dependencies = AppComponent.class)
-public interface MainActivityComponent {
+@Component(modules = FavoriteActivityModule.class, dependencies = AppComponent.class)
+public interface FavoriteActivityComponent {
 
-    MainActivity inject(MainActivity mainActivity);
+    FavoriteActivity inject(FavoriteActivity favoriteActivity);
 }

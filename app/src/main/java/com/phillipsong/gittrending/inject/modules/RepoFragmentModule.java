@@ -13,16 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.ui.activity;
+package com.phillipsong.gittrending.inject.modules;
 
-import com.phillipsong.gittrending.AppComponent;
-import com.phillipsong.gittrending.ui.misc.ActivityScope;
+import com.phillipsong.gittrending.ui.fragment.RepoFragment;
+import com.phillipsong.gittrending.ui.misc.PerFragment;
 
-import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
 
-@ActivityScope
-@Component(modules = AboutActivityModule.class, dependencies = AppComponent.class)
-public interface AboutActivityComponent {
+@Module
+public class RepoFragmentModule {
 
-    AboutActivity inject(AboutActivity aboutActivity);
+    RepoFragment mRepoFragment;
+
+    public RepoFragmentModule(RepoFragment fragment) {
+        this.mRepoFragment = fragment;
+    }
+
+    @Provides
+    @PerFragment
+    RepoFragment provideRepoFragment() {
+        return mRepoFragment;
+    }
 }

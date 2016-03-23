@@ -17,8 +17,8 @@ package com.phillipsong.gittrending.ui.fragment;
 
 import android.os.Bundle;
 
-import com.phillipsong.gittrending.AppComponent;
 import com.phillipsong.gittrending.TrendingApplication;
+import com.phillipsong.gittrending.inject.components.AppComponent;
 import com.trello.rxlifecycle.components.support.RxFragment;
 
 public abstract class BaseFragment extends RxFragment {

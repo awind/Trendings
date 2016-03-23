@@ -13,16 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.ui.activity;
+package com.phillipsong.gittrending.inject.modules;
 
-import com.phillipsong.gittrending.AppComponent;
-import com.phillipsong.gittrending.ui.misc.ActivityScope;
+import com.phillipsong.gittrending.ui.activity.LanguagesActivity;
 
-import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
 
-@ActivityScope
-@Component(modules = LanguagesActivityModule.class, dependencies = AppComponent.class)
-public interface LanguagesActivityComponent {
+@Module
+public class LanguagesActivityModule {
 
-    LanguagesActivity inject(LanguagesActivity languagesActivity);
+    private LanguagesActivity mLanguagesActivity;
+
+    public LanguagesActivityModule(LanguagesActivity languagesActivity) {
+        this.mLanguagesActivity = languagesActivity;
+    }
+
+    @Provides
+    public LanguagesActivity provideLanguagesActivity() {
+        return mLanguagesActivity;
+    }
 }

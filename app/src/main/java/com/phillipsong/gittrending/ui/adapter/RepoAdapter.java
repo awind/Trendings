@@ -83,9 +83,9 @@ public class RepoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mStar.setText(repo.getStar());
 
             if (repo.isFavorited()) {
-                mFavorite.setText(R.string.activity_repo_favorited);
+                mFavorite.setText(R.string.repo_item_liked);
             } else {
-                mFavorite.setText(R.string.activity_favorite_title);
+                mFavorite.setText(R.string.repo_item_like);
             }
 
             mShare.setOnClickListener(v -> {

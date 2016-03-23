@@ -29,8 +29,8 @@
            <TextView
                android:id="@+id/title"
                android:textColor="@color/text_color_blue"
-               android:paddingLeft="16dp"
-               android:paddingRight="50dp"
+               android:paddingStart="16dp"
+               android:paddingEnd="50dp"
                android:maxLines="2"
                android:ellipsize="end"
                android:textSize="17sp"
@@ -41,8 +41,8 @@
 
            <ImageView
                android:id="@+id/language"
-               android:layout_alignParentRight="true"
-               android:layout_marginRight="16dp"
+               android:layout_alignParentEnd="true"
+               android:layout_marginEnd="16dp"
                android:layout_width="24dp"
                android:layout_height="24dp"/>
 
@@ -69,8 +69,8 @@
                android:id="@+id/built"
                android:textSize="12sp"
                android:textColor="@color/text_color_gray"
-               android:text="Built by"
-               android:paddingLeft="16sp"
+               android:text="@string/repo_item_built"
+               android:paddingStart="16sp"
                android:gravity="bottom"
                android:layout_centerVertical="true"
                android:layout_width="wrap_content"
@@ -81,8 +81,8 @@
                android:id="@+id/avatar"
                android:orientation="horizontal"
                android:layout_centerVertical="true"
-               android:layout_toRightOf="@+id/built"
-               android:layout_marginLeft="4dp"
+               android:layout_toEndOf="@+id/built"
+               android:layout_marginStart="4dp"
                android:layout_width="wrap_content"
                android:layout_height="24dp"/>
 
@@ -91,8 +91,8 @@
                android:gravity="center_vertical"
                android:textSize="12sp"
                android:textColor="@color/text_color_gray"
-               android:layout_alignParentRight="true"
-               android:layout_marginRight="28dp"
+               android:layout_alignParentEnd="true"
+               android:layout_marginEnd="28dp"
                android:layout_centerVertical="true"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"/>
@@ -117,8 +117,8 @@
                android:id="@+id/share"
                android:textSize="14sp"
                android:textColor="@color/text_color_black"
-               android:text="SHARE"
-               android:paddingLeft="16dp"
+               android:text="@string/repo_item_share"
+               android:paddingStart="16dp"
                android:textStyle="bold"
                android:gravity="center_vertical"
                android:layout_width="wrap_content"
@@ -129,10 +129,10 @@
                android:id="@+id/favorite"
                android:textSize="14sp"
                android:textColor="@color/text_color_black"
-               android:text="FAVORITE"
+               android:text="@string/repo_item_like"
                android:textStyle="bold"
-               android:layout_alignParentRight="true"
-               android:layout_marginRight="28dp"
+               android:layout_alignParentEnd="true"
+               android:layout_marginEnd="28dp"
                android:gravity="center_vertical"
                android:layout_width="wrap_content"
                android:layout_height="match_parent"/>

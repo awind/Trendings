@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="?homeAsUpIndicator"
-                app:title="@string/action_about" />
+                app:title="@string/about_title" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

@@ -13,28 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending;
+package com.phillipsong.gittrending.inject.components;
 
-import android.content.SharedPreferences;
-
-import com.phillipsong.gittrending.data.api.ApiModule;
-import com.phillipsong.gittrending.data.api.TrendingService;
-
-import javax.inject.Singleton;
+import com.phillipsong.gittrending.inject.modules.AboutActivityModule;
+import com.phillipsong.gittrending.ui.activity.AboutActivity;
+import com.phillipsong.gittrending.ui.misc.ActivityScope;
 
 import dagger.Component;
-import io.realm.Realm;
 
+@ActivityScope
+@Component(modules = AboutActivityModule.class, dependencies = AppComponent.class)
+public interface AboutActivityComponent {
 
-@Singleton
-@Component(modules = {AppModule.class, ApiModule.class})
-public interface AppComponent {
-
-    TrendingApplication getApplication();
-
-    TrendingService getTrendingService();
-
-    Realm getRealm();
-
-    SharedPreferences getSharedPreferences();
+    AboutActivity inject(AboutActivity aboutActivity);
 }

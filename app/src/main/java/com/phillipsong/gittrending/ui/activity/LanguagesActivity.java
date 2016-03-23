@@ -23,12 +23,14 @@ import android.support.v7.widget.Toolbar;
 
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 import com.jakewharton.rxbinding.support.v7.widget.RxToolbar;
-import com.phillipsong.gittrending.AppComponent;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.api.TrendingService;
 import com.phillipsong.gittrending.data.models.Language;
 import com.phillipsong.gittrending.data.models.Support;
+import com.phillipsong.gittrending.inject.components.AppComponent;
+import com.phillipsong.gittrending.inject.components.DaggerLanguagesActivityComponent;
+import com.phillipsong.gittrending.inject.modules.LanguagesActivityModule;
 import com.phillipsong.gittrending.ui.adapter.LanguageAdapter;
 import com.phillipsong.gittrending.ui.misc.OnLanguageClickListener;
 import com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout;
@@ -80,7 +82,7 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
 
     private void initViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle(R.string.activity_languages_title);
+        mToolbar.setTitle(R.string.languages_title);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RxToolbar.navigationClicks(mToolbar)
