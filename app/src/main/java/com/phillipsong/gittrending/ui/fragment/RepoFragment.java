@@ -137,7 +137,8 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
     }
 
     public void updateData(String since) {
-        mTrendingApi.getTrending(mLanguage, since)
+        mSince = since;
+        mTrendingApi.getTrending(mLanguage, mSince)
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -149,7 +150,7 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                     mRepoList.clear();
                     mRepoList.addAll(trending.getItems());
                     mRepoAdapter.notifyDataSetChanged();
-                }, error->{
+                }, error -> {
                     Log.d(TAG, "updateData: " + error.getMessage());
                 });
     }

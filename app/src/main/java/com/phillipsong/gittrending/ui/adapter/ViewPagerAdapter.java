@@ -18,17 +18,18 @@ package com.phillipsong.gittrending.ui.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
+
+import com.phillipsong.gittrending.ui.fragment.RepoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> mFragmentList = new ArrayList<>();
     private List<String> mFragmentTitleList = new ArrayList<>();
 
     private FragmentManager mFragmentManager;
+    private String mSince = "daily";
 
     public ViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -37,27 +38,24 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return mFragmentList.get(position);
+        return RepoFragment.newInstance(mFragmentTitleList.get(position), mSince);
     }
 
     @Override
     public int getCount() {
-        return mFragmentList.size();
+        return mFragmentTitleList.size();
     }
 
-    public void addFragment(Fragment fragment, String title) {
-        mFragmentList.add(fragment);
+    public void addFragment(String title) {
         mFragmentTitleList.add(title);
     }
 
+    public void setSince(String since) {
+        mSince = since;
+    }
+
     public void clearFragmentList() {
-        FragmentTransaction ft = mFragmentManager.beginTransaction();
-        for (Fragment fragment : mFragmentList) {
-            ft.remove(fragment);
-        }
-        ft.commit();
         mFragmentTitleList.clear();
-        mFragmentList.clear();
     }
 
     @Override

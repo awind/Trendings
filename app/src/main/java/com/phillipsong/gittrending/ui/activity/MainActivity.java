@@ -146,7 +146,6 @@ public class MainActivity extends BaseActivity {
                     case 2:
                         mSince = "monthly";
                         break;
-
                 }
 
                 for (int i = 0; i < mPagerAdapter.getCount(); i++) {
@@ -158,6 +157,7 @@ public class MainActivity extends BaseActivity {
                         }
                     }
                 }
+                mPagerAdapter.setSince(mSince);
 
             }
 
@@ -169,22 +169,32 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setupViewPager() {
-        mPagerAdapter.clearFragmentList();
+        clearFragment();
         RealmResults<Language> languages = mRealm.where(Language.class).findAll();
         if (languages.size() > 0) {
             for (Language language : languages) {
-                mPagerAdapter.addFragment(RepoFragment.newInstance(
-                        language.getName().toLowerCase(), mSince), language.getName());
+                mPagerAdapter.addFragment(language.getName().toLowerCase());
             }
         } else {
-            mPagerAdapter.addFragment(RepoFragment.newInstance(
-                    "all", mSince), "All");
-            mPagerAdapter.addFragment(RepoFragment.newInstance(
-                    "java", mSince), "Java");
+            mPagerAdapter.addFragment("all");
+            mPagerAdapter.addFragment("java");
+            mPagerAdapter.addFragment("swift");
         }
+        mPagerAdapter.setSince(mSince);
         mPagerAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(0);
         mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    private void clearFragment() {
+        for (int i = 0; i < mPagerAdapter.getCount(); i++) {
+            Fragment fragment = getSupportFragmentManager()
+                    .findFragmentByTag(mPagerAdapter.getFragmentTag(R.id.view_pager, i));
+            if (fragment instanceof RepoFragment) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        }
+        mPagerAdapter.clearFragmentList();
     }
 
     @Override
