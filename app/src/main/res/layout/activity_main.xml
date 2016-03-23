@@ -47,6 +47,7 @@
         android:layout_height="wrap_content"
         app:layout_behavior="com.phillipsong.gittrending.ui.misc.ScrollAwareFABBehavior"
         android:layout_gravity="bottom|end"
+        android:background="@drawable/bg_fab"
         android:layout_margin="@dimen/fab_margin"
         android:src="@mipmap/ic_fav"/>
 

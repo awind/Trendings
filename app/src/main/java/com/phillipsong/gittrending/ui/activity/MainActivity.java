@@ -255,7 +255,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_LANGUAGE) {
+        if (requestCode == REQUEST_LANGUAGE && resultCode == RESULT_OK) {
             setupViewPager();
         }
     }

@@ -59,6 +59,7 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
     private LanguageAdapter mLanguageAdapter;
 
     private List<Language> mLanguageList = new ArrayList<>();
+    private boolean isChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +155,15 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
             mRealm.copyToRealm(language);
         }
         mRealm.commitTransaction();
+        isChanged = true;
         mLanguageAdapter.notifyItemChanged(position);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (isChanged) {
+            setResult(RESULT_OK);
+        }
+        super.onBackPressed();
+    }
 }

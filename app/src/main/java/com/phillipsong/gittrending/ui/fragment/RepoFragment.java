@@ -168,6 +168,7 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                 .subscribe(repos -> {
                     if (repos.size() > 0) {
                         mRealm.beginTransaction();
+                        repo.setIsFavorited(false);
                         repos.removeLast();
                         mRealm.commitTransaction();
                     } else if (repos.size() == 0) {
@@ -176,7 +177,7 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                         mRealm.copyToRealm(repo);
                         mRealm.commitTransaction();
                     }
-                    mRepoAdapter.notifyDataSetChanged();
+                    mRepoAdapter.notifyItemChanged(position);
                 });
 
         Answers.getInstance().logCustom(new CustomEvent("Favorite")

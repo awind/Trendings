@@ -6,10 +6,10 @@
 
     <string name="repo_title">%1$s/</string>
 
-    <string name="activity_favorite_title">Favorite</string>
+    <string name="activity_favorite_title">Like</string>
     <string name="action_about">About</string>
     <string name="activity_languages_title">Languages</string>
-    <string name="activity_repo_favorited">Favorited</string>
+    <string name="activity_repo_favorited">Liked</string>
 
     <string name="image_base_url">http://7xs2pw.com1.z0.glb.clouddn.com/%1$s.png</string>
 
@@ -98,11 +98,12 @@
             <div class="card">{{about_trendings_text}}</div>
             <h2>{{libraries_used}}</h2>
             <ul>
+                <li><a href="https://github.com/square/retrofit">square / retrofit</a></li>
                 <li><a href="https://github.com/ReactiveX/RxJava">ReactiveX / RxJava</a></li>
                 <li><a href="https://github.com/ReactiveX/RxAndroid">ReactiveX / RxAndroid</a></li>
                 <li><a href="https://github.com/trello/RxLifecycle">trello / RxLifecycle</a></li>
                 <li><a href="https://github.com/JakeWharton/RxBinding">JakeWharton / RxBinding</a></li>
-                <li><a href="https://github.com/square/picasso">square / Picasso</a></li>
+                <li><a href="https://github.com/bumptech/glide">bumptech / glide</a></li>
                 <li><a href="https://github.com/google/dagger">google / Dagger</a></li>
             </ul>
         </body>

@@ -20,9 +20,9 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.phillipsong.gittrending.data.models.Contributor;
 import com.phillipsong.gittrending.utils.UnitUtil;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -54,10 +54,10 @@ public class AvatarContainer extends LinearLayout {
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(square, square);
             param.setMargins(8, 0, 0, 0);
             imageView.setLayoutParams(param);
-            Picasso.with(mContext)
+            Glide.with(mContext)
                     .load(contributor.getAvatar())
                     .centerCrop()
-                    .fit()
+                    .centerCrop()
                     .into(imageView);
             addView(imageView);
         }

@@ -24,10 +24,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.data.models.Language;
 import com.phillipsong.gittrending.ui.misc.OnLanguageClickListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -69,11 +69,10 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
     public void onBindViewHolder(LanguageViewHolder holder, int position) {
         Language language = mLanguages.get(position);
         holder.mName.setText(language.getName());
-        Picasso.with(mContext)
+        Glide.with(mContext)
                 .load(language.getIcon())
                 .error(R.mipmap.ic_lang)
-                .centerInside()
-                .fit()
+                .centerCrop()
                 .into(holder.mIcon);
         if (language.isSelect()) {
             holder.mSelectLayer.setVisibility(View.VISIBLE);
