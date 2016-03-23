@@ -76,7 +76,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Glide.with(context)
                     .load(languagePic)
                     .error(R.mipmap.ic_lang)
-                    .centerCrop()
+                    .fitCenter()
                     .into(mLanguage);
             mDescription.setText(repo.getDescription());
             mAvatar.setImageUrls(repo.getContributors());

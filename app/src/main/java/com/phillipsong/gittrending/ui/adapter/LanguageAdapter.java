@@ -72,7 +72,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
         Glide.with(mContext)
                 .load(language.getIcon())
                 .error(R.mipmap.ic_lang)
-                .centerCrop()
+                .fitCenter()
                 .into(holder.mIcon);
         if (language.isSelect()) {
             holder.mSelectLayer.setVisibility(View.VISIBLE);

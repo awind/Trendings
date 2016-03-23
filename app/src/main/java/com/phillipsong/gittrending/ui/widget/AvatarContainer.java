@@ -56,8 +56,7 @@ public class AvatarContainer extends LinearLayout {
             imageView.setLayoutParams(param);
             Glide.with(mContext)
                     .load(contributor.getAvatar())
-                    .centerCrop()
-                    .centerCrop()
+                    .fitCenter()
                     .into(imageView);
             addView(imageView);
         }
