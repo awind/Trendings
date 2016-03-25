@@ -17,7 +17,7 @@ package com.phillipsong.gittrending.ui.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
@@ -63,6 +63,7 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
     private List<Language> mLanguageList = new ArrayList<>();
     private boolean isChanged = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +106,7 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
                 });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(layoutManager);
         mLanguageAdapter = new LanguageAdapter(mContext, mLanguageList, this);
         mRecyclerView.setAdapter(mLanguageAdapter);
@@ -140,7 +141,7 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int position, boolean isChecked) {
         if (mLanguageList == null || mLanguageList.size() == 0) {
             return;
         }
@@ -149,16 +150,13 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
         RealmResults<Language> languages = mRealm.where(Language.class)
                 .equalTo("name", language.getName()).findAll();
         mRealm.beginTransaction();
-        if (languages.size() > 0) {
-            language.setIsSelect(false);
+        if (!isChecked) {
             languages.removeLast();
         } else {
-            language.setIsSelect(true);
             mRealm.copyToRealm(language);
         }
         mRealm.commitTransaction();
         isChanged = true;
-        mLanguageAdapter.notifyItemChanged(position);
     }
 
     @Override

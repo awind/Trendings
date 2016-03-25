@@ -28,12 +28,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private List<String> mFragmentTitleList = new ArrayList<>();
 
-    private FragmentManager mFragmentManager;
     private String mSince = "daily";
 
     public ViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
-        mFragmentManager = fragmentManager;
     }
 
     @Override

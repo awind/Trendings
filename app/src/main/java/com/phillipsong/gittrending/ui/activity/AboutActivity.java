@@ -18,8 +18,10 @@ package com.phillipsong.gittrending.ui.activity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.webkit.WebView;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxToolbar;
+import com.phillipsong.gittrending.BuildConfig;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.inject.components.AppComponent;
 import com.phillipsong.gittrending.inject.components.DaggerAboutActivityComponent;
@@ -29,6 +31,7 @@ public class AboutActivity extends BaseActivity {
 
     private Toolbar mToolbar;
     private WebView mWebView;
+    private TextView mVersionTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,9 @@ public class AboutActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         RxToolbar.navigationClicks(mToolbar)
                 .subscribe(aVoid -> finish());
+        mVersionTv = (TextView) findViewById(R.id.version);
+        mVersionTv.setText(String.format(getString(R.string.version), BuildConfig.VERSION_NAME,
+                BuildConfig.BUILD_TYPE));
 
         mWebView = (WebView) findViewById(R.id.webview);
         final String template = getString(R.string.about_page)

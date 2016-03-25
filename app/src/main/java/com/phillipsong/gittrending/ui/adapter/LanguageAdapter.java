@@ -17,11 +17,12 @@ package com.phillipsong.gittrending.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -36,19 +37,20 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
     public static class LanguageViewHolder extends RecyclerView.ViewHolder {
         private ImageView mIcon;
         private TextView mName;
-        private RelativeLayout mSelectLayer;
+        private SwitchCompat mSwitchCompat;
 
         public LanguageViewHolder(View view) {
             super(view);
             mIcon = (ImageView) view.findViewById(R.id.language_icon);
             mName = (TextView) view.findViewById(R.id.language_name);
-            mSelectLayer = (RelativeLayout) view.findViewById(R.id.select_layer);
+            mSwitchCompat = (SwitchCompat) view.findViewById(R.id.switcher);
         }
     }
 
     private Context mContext;
     private List<Language> mLanguages;
     private OnLanguageClickListener mListener;
+
 
     public LanguageAdapter(Context context, List<Language> languages, OnLanguageClickListener listener) {
         this.mContext = context;
@@ -67,6 +69,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
 
     @Override
     public void onBindViewHolder(LanguageViewHolder holder, int position) {
+        holder.mSwitchCompat.setOnCheckedChangeListener(null);
         Language language = mLanguages.get(position);
         holder.mName.setText(language.getName());
         Glide.with(mContext)
@@ -74,14 +77,12 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
                 .error(R.mipmap.ic_lang)
                 .fitCenter()
                 .into(holder.mIcon);
-        if (language.isSelect()) {
-            holder.mSelectLayer.setVisibility(View.VISIBLE);
-        } else {
-            holder.mSelectLayer.setVisibility(View.GONE);
-        }
-        holder.itemView.setOnClickListener(view -> {
+        holder.mSwitchCompat.setChecked(language.isSelect());
+        holder.mSwitchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d("Language2", "onBindViewHolder: " + position + language.getName());
+            language.setIsSelect(isChecked);
             if (mListener != null) {
-                mListener.onItemClick(position);
+                mListener.onItemClick(position, isChecked);
             }
         });
     }

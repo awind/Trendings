@@ -89,12 +89,17 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
         return fragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mLanguage = getArguments().getString(LANGUAGE);
+        mSince = getArguments().getString(SINCE);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_repo, container, false);
-        mLanguage = getArguments().getString(LANGUAGE);
-        mSince = getArguments().getString(SINCE);
         initViews(view);
         return view;
     }
@@ -140,6 +145,7 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
 
     public void updateData(String since) {
         mSince = since;
+        Log.d(TAG, "updateData: " + mLanguage + "  " + mSince);
         mTrendingApi.getTrending(mLanguage, mSince)
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())

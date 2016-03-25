@@ -98,7 +98,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initDefaultTab() {
-        String[] languages = {"all", "java", "swift", "c", "cpp", "php", "javascript"};
+        String[] languages = {"all", "java", "swift", "javascript", "objective-c", "python"};
         for (String lang : languages) {
             Language language = new Language(lang, mSince, true);
             mRealm.beginTransaction();
