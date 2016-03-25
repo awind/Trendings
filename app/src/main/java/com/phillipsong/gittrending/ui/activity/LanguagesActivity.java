@@ -21,6 +21,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 import com.jakewharton.rxbinding.support.v7.widget.RxToolbar;
 import com.phillipsong.gittrending.R;
@@ -44,9 +46,12 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class LanguagesActivity extends BaseActivity implements OnLanguageClickListener {
+
+    private static final String TAG = "LanguagesActivity";
 
     @Inject
     TrendingApplication mContext;
@@ -63,6 +68,17 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
     private List<Language> mLanguageList = new ArrayList<>();
     private boolean isChanged = false;
 
+    private Action1<Support> mUpdateAction = support -> {
+        mLanguageList.clear();
+        mLanguageList.addAll(support.getItems());
+        mLanguageAdapter.notifyDataSetChanged();
+    };
+
+    private Action1<Throwable> mThrowableAction = throwable -> {
+        Answers.getInstance().logCustom(new CustomEvent("UpdateException")
+                .putCustomAttribute("location", TAG)
+                .putCustomAttribute("message", throwable.getMessage()));
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +106,7 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
                 .subscribe(aVoid -> onBackPressed());
 
         mSwipeRefreshLayout = (PSwipeRefreshLayout) findViewById(R.id.refresher);
-        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLUE, Color.CYAN);
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
                 .compose(bindToLifecycle())
                 .observeOn(Schedulers.io())
@@ -98,12 +114,8 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aVoid -> mSwipeRefreshLayout.setRefreshing(false))
                 .retry()
-                .flatMap(support -> checkLanguage(support))
-                .subscribe(support -> {
-                    mLanguageList.clear();
-                    mLanguageList.addAll(support.getItems());
-                    mLanguageAdapter.notifyDataSetChanged();
-                });
+                .flatMap(this::checkLanguage)
+                .subscribe(mUpdateAction, mThrowableAction);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
@@ -120,13 +132,8 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
                 .doOnSubscribe(() -> mSwipeRefreshLayout.setRefreshing(true))
                 .doOnCompleted(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .doOnError(error -> mSwipeRefreshLayout.setRefreshing(false))
-                .flatMap(support -> checkLanguage(support))
-                .subscribe(support -> {
-                    mLanguageList.clear();
-                    mLanguageList.addAll(support.getItems());
-                    mLanguageAdapter.notifyDataSetChanged();
-                }, error -> {
-                });
+                .flatMap(this::checkLanguage)
+                .subscribe(mUpdateAction, mThrowableAction);
     }
 
     private Observable<Support> checkLanguage(Support support) {

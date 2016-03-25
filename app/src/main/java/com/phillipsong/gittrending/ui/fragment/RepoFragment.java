@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +54,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class RepoFragment extends BaseFragment implements OnRepoItemClickListener {
@@ -78,6 +78,18 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
 
     private String mLanguage;
     private String mSince;
+
+
+    private Action1<Trending> mUpdateAction = trending -> {
+        mRepoList.clear();
+        mRepoList.addAll(trending.getItems());
+        mRepoAdapter.notifyDataSetChanged();
+    };
+
+    private Action1<Throwable> mThrowableAction = throwable ->
+            Answers.getInstance().logCustom(new CustomEvent("UpdateException")
+            .putCustomAttribute("location", TAG)
+            .putCustomAttribute("message", throwable.getMessage()));
 
     public static RepoFragment newInstance(String language, String since) {
         RepoFragment fragment = new RepoFragment();
@@ -115,7 +127,7 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
 
     private void initViews(View view) {
         mSwipeRefreshLayout = (PSwipeRefreshLayout) view.findViewById(R.id.refresher);
-        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLUE, Color.CYAN);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mRecyclerView.setNestedScrollingEnabled(true);
@@ -135,17 +147,12 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aVoid -> mSwipeRefreshLayout.setRefreshing(false))
                 .retry()
-                .flatMap(trending -> checkFavorite(trending))
-                .subscribe(trending -> {
-                    mRepoList.clear();
-                    mRepoList.addAll(trending.getItems());
-                    mRepoAdapter.notifyDataSetChanged();
-                });
+                .flatMap(this::checkFavorite)
+                .subscribe(mUpdateAction, mThrowableAction);
     }
 
     public void updateData(String since) {
         mSince = since;
-        Log.d(TAG, "updateData: " + mLanguage + "  " + mSince);
         mTrendingApi.getTrending(mLanguage, mSince)
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
@@ -153,14 +160,8 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                 .doOnSubscribe(() -> mSwipeRefreshLayout.setRefreshing(true))
                 .doOnCompleted(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .doOnError(error -> mSwipeRefreshLayout.setRefreshing(false))
-                .flatMap(trending -> checkFavorite(trending))
-                .subscribe(trending -> {
-                    mRepoList.clear();
-                    mRepoList.addAll(trending.getItems());
-                    mRepoAdapter.notifyDataSetChanged();
-                }, error -> {
-                    Log.d(TAG, "updateData: " + error.getMessage());
-                });
+                .flatMap(this::checkFavorite)
+                .subscribe(mUpdateAction, mThrowableAction);
     }
 
     @Override
@@ -191,7 +192,8 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
 
         Answers.getInstance().logCustom(new CustomEvent("Favorite")
                 .putCustomAttribute("name", repo.getUrl())
-                .putCustomAttribute("type", mLanguage));
+                .putCustomAttribute("id", mLanguage)
+                .putCustomAttribute("type", TAG));
     }
 
     @Override
@@ -228,9 +230,6 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
     }
 
     private Observable<Trending> checkFavorite(Trending trending) {
-        if (trending == null) {
-            return Observable.just(null);
-        }
         for (Repo repo : trending.getItems()) {
             RealmResults<Repo> repos = mRealm.where(Repo.class)
                     .equalTo("url", repo.getUrl()).findAll();
