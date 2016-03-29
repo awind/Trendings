@@ -15,6 +15,7 @@
  */
 package com.phillipsong.gittrending.data.api;
 
+import com.phillipsong.gittrending.data.models.Developers;
 import com.phillipsong.gittrending.data.models.Support;
 import com.phillipsong.gittrending.data.models.Trending;
 
@@ -25,8 +26,13 @@ import rx.Observable;
 public interface TrendingService {
 
     @GET("/v2")
-    Observable<Trending> getTrending(@Query("language") String language, @Query("since") String since);
+    Observable<Trending> getTrending(@Query("language") String language,
+                                     @Query("since") String since);
 
     @GET("/v2/support")
     Observable<Support> getSupport();
+
+    @GET("/v2/developers")
+    Observable<Developers> getDevelopers(@Query("language") String language,
+                                         @Query("since") String since);
 }

@@ -111,7 +111,13 @@
         </body>
     </html>
     ]]></string>
+    <string name="title_activity_main2">DeveloperActivity</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_daily">daily</string>
+    <string name="action_weekly">weekly</string>
+    <string name="action_monthly">monthly</string>
 
 
 </resources>

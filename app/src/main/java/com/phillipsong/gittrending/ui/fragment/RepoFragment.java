@@ -80,9 +80,9 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
     private String mSince;
 
 
-    private Action1<Trending> mUpdateAction = trending -> {
+    private Action1<List<Repo>> mUpdateAction = items -> {
         mRepoList.clear();
-        mRepoList.addAll(trending.getItems());
+        mRepoList.addAll(items);
         mRepoAdapter.notifyDataSetChanged();
     };
 
@@ -229,7 +229,7 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                 .putContentType(TAG));
     }
 
-    private Observable<Trending> checkFavorite(Trending trending) {
+    private Observable<List<Repo>> checkFavorite(Trending trending) {
         for (Repo repo : trending.getItems()) {
             RealmResults<Repo> repos = mRealm.where(Repo.class)
                     .equalTo("url", repo.getUrl()).findAll();
@@ -237,7 +237,7 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                 repo.setIsFavorited(true);
             }
         }
-        return Observable.just(trending);
+        return Observable.just(trending.getItems());
     }
 
 }

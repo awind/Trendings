@@ -3,6 +3,7 @@
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".TrendingApplication"
         android:allowBackup="true"
@@ -20,15 +21,19 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.activity.FavoriteActivity"/>
-
         <activity android:name=".ui.activity.LanguagesActivity"/>
-
         <activity android:name=".ui.activity.AboutActivity"/>
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="a8dbb91c6c25377d1cb8886e9939d5d015d59c3a" />
+            android:value="a8dbb91c6c25377d1cb8886e9939d5d015d59c3a"/>
+
+        <activity
+            android:name=".ui.activity.DeveloperActivity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

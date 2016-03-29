@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2016 Phillip Song (http://github.com/awind).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.phillipsong.gittrending.ui.activity;
 
 import android.content.Intent;
@@ -32,17 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.api.TrendingService;
 import com.phillipsong.gittrending.data.models.Language;
 import com.phillipsong.gittrending.inject.components.AppComponent;
-import com.phillipsong.gittrending.inject.components.DaggerMainActivityComponent;
-import com.phillipsong.gittrending.inject.modules.MainActivityModule;
+import com.phillipsong.gittrending.inject.components.DaggerDeveloperActivityComponent;
+import com.phillipsong.gittrending.inject.modules.DeveloperActivityModule;
 import com.phillipsong.gittrending.ui.adapter.ViewPagerAdapter;
 import com.phillipsong.gittrending.ui.fragment.RepoFragment;
 
@@ -51,12 +34,8 @@ import javax.inject.Inject;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class MainActivity extends BaseNaviActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    private static final String TAG = "MainActivity";
-
-    private static final String IS_USED = "used";
-    private static final int REQUEST_LANGUAGE = 10;
+public class DeveloperActivity extends BaseNaviActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @Inject
     TrendingApplication mContext;
@@ -64,8 +43,7 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
     TrendingService mTrendingApi;
     @Inject
     Realm mRealm;
-    @Inject
-    SharedPreferences mSharedPreferences;
+
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -76,43 +54,9 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        super.onCreateDrawer();
+        setContentView(R.layout.activity_developer);
         mNavigationView.setNavigationItemSelectedListener(this);
-        boolean isUsed = mSharedPreferences.getBoolean(IS_USED, false);
-        if (!isUsed) {
-            initDefaultTab();
-            mSharedPreferences.edit().putBoolean(IS_USED, true).apply();
-        }
         initViews();
-    }
-
-    @Override
-    protected void setupActivityComponent(AppComponent appComponent) {
-        DaggerMainActivityComponent.builder()
-                .appComponent(appComponent)
-                .mainActivityModule(new MainActivityModule(this))
-                .build()
-                .inject(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    private void initDefaultTab() {
-        String[] languages = {"all", "java", "swift", "javascript", "objective-c", "python"};
-        for (String lang : languages) {
-            Language language = new Language(lang, mSince, true);
-            mRealm.beginTransaction();
-            mRealm.copyToRealm(language);
-            mRealm.commitTransaction();
-        }
     }
 
     private void initViews() {
@@ -154,6 +98,26 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
     }
 
     @Override
+    protected void setupActivityComponent(AppComponent appComponent) {
+        DaggerDeveloperActivityComponent.builder()
+                .appComponent(appComponent)
+                .developerActivityModule(new DeveloperActivityModule(this))
+                .build()
+                .inject(this);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -180,14 +144,6 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_LANGUAGE && resultCode == RESULT_OK) {
-            setupViewPager();
-        }
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -195,11 +151,12 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
         int id = item.getItemId();
 
         if (id == R.id.nav_trending) {
-        } else if (id == R.id.nav_developer) {
-            Intent intent = new Intent(this, DeveloperActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             overridePendingTransition(0, 0);
             finish();
+        } else if (id == R.id.nav_developer) {
+
         } else if (id == R.id.nav_about) {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
