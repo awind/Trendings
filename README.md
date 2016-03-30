@@ -37,7 +37,6 @@
 Follow and contact me on [Twitter](https://twitter.com/debitosou) or [Sina Weibo](http://www.weibo.com/isongfei). If you find an issue, just open a ticket on it. Pull requests are warmly welcome as well.
 
 # License
-=======
 
 
  	Copyright (c) 2016 Phillip Song 
