@@ -1,23 +1,15 @@
 package com.phillipsong.gittrending.ui.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Spinner;
 
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
@@ -26,8 +18,8 @@ import com.phillipsong.gittrending.data.models.Language;
 import com.phillipsong.gittrending.inject.components.AppComponent;
 import com.phillipsong.gittrending.inject.components.DaggerDeveloperActivityComponent;
 import com.phillipsong.gittrending.inject.modules.DeveloperActivityModule;
-import com.phillipsong.gittrending.ui.adapter.ViewPagerAdapter;
-import com.phillipsong.gittrending.ui.fragment.RepoFragment;
+import com.phillipsong.gittrending.ui.adapter.DevelopersViewPagerAdapter;
+import com.phillipsong.gittrending.ui.fragment.DeveloperFragment;
 
 import javax.inject.Inject;
 
@@ -36,6 +28,8 @@ import io.realm.RealmResults;
 
 public class DeveloperActivity extends BaseNaviActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final int REQUEST_LANGUAGE = 10;
 
     @Inject
     TrendingApplication mContext;
@@ -47,7 +41,7 @@ public class DeveloperActivity extends BaseNaviActivity
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private ViewPagerAdapter mPagerAdapter;
+    private DevelopersViewPagerAdapter mPagerAdapter;
 
     private String mSince = "daily";
 
@@ -56,13 +50,15 @@ public class DeveloperActivity extends BaseNaviActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_developer);
         mNavigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.getMenu().getItem(1).setChecked(true);
         initViews();
     }
 
     private void initViews() {
+        mToolbar.setTitle(R.string.title_activity_developer);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
-        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mPagerAdapter = new DevelopersViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
         setupViewPager();
         mTabLayout.setupWithViewPager(mViewPager);
@@ -90,7 +86,7 @@ public class DeveloperActivity extends BaseNaviActivity
         for (int i = 0; i < mPagerAdapter.getCount(); i++) {
             Fragment fragment = getSupportFragmentManager()
                     .findFragmentByTag(mPagerAdapter.getFragmentTag(R.id.view_pager, i));
-            if (fragment instanceof RepoFragment) {
+            if (fragment instanceof DeveloperFragment) {
                 getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             }
         }
@@ -128,9 +124,9 @@ public class DeveloperActivity extends BaseNaviActivity
         for (int i = 0; i < mPagerAdapter.getCount(); i++) {
             Fragment fragment = getSupportFragmentManager()
                     .findFragmentByTag(mPagerAdapter.getFragmentTag(R.id.view_pager, i));
-            if (fragment instanceof RepoFragment) {
+            if (fragment instanceof DeveloperFragment) {
                 if (fragment.isAdded()) {
-                    ((RepoFragment) fragment).updateData(mSince);
+                    ((DeveloperFragment) fragment).updateData(mSince);
                 }
             }
         }
@@ -142,6 +138,14 @@ public class DeveloperActivity extends BaseNaviActivity
         mSince = item.getTitle().toString();
         updateSince();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LANGUAGE && resultCode == RESULT_OK) {
+            setupViewPager();
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -162,7 +166,7 @@ public class DeveloperActivity extends BaseNaviActivity
             startActivity(intent);
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, LanguagesActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_LANGUAGE);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

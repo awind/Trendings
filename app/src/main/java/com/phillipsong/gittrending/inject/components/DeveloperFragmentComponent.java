@@ -13,27 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.inject.modules;
+package com.phillipsong.gittrending.inject.components;
 
-import com.phillipsong.gittrending.ui.activity.DeveloperActivity;
+import com.phillipsong.gittrending.inject.modules.DeveloperFragmentModule;
+import com.phillipsong.gittrending.ui.fragment.DeveloperFragment;
+import com.phillipsong.gittrending.ui.misc.PerFragment;
 
-import javax.inject.Singleton;
+import dagger.Component;
 
-import dagger.Module;
-import dagger.Provides;
+@PerFragment
+@Component(modules = DeveloperFragmentModule.class, dependencies = AppComponent.class)
+public interface DeveloperFragmentComponent extends DeveloperActivityComponent {
 
-@Module
-public class DeveloperActivityModule {
-
-    private DeveloperActivity mDeveloperActivity;
-
-    public DeveloperActivityModule(DeveloperActivity developerActivity) {
-        this.mDeveloperActivity = developerActivity;
-    }
-
-    @Provides
-    @Singleton
-    DeveloperActivity provideDeveloperActivity() {
-        return mDeveloperActivity;
-    }
+    void inject(DeveloperFragment fragment);
 }

@@ -15,25 +15,24 @@
  */
 package com.phillipsong.gittrending.inject.modules;
 
-import com.phillipsong.gittrending.ui.activity.DeveloperActivity;
-
-import javax.inject.Singleton;
+import com.phillipsong.gittrending.ui.fragment.DeveloperFragment;
+import com.phillipsong.gittrending.ui.misc.PerFragment;
 
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class DeveloperActivityModule {
+public class DeveloperFragmentModule {
 
-    private DeveloperActivity mDeveloperActivity;
+    DeveloperFragment mDeveloperFragment;
 
-    public DeveloperActivityModule(DeveloperActivity developerActivity) {
-        this.mDeveloperActivity = developerActivity;
+    public DeveloperFragmentModule(DeveloperFragment fragment) {
+        this.mDeveloperFragment = fragment;
     }
 
     @Provides
-    @Singleton
-    DeveloperActivity provideDeveloperActivity() {
-        return mDeveloperActivity;
+    @PerFragment
+    DeveloperFragment provideRepoFragment() {
+        return mDeveloperFragment;
     }
 }

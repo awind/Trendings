@@ -123,11 +123,11 @@ public class RepoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         if (viewType == TYPE_FOOTER) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trending_item_footer,
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer,
                     parent, false);
             return new FootViewHolder(view);
         }
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trending_item_repo,
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_repo,
                 parent, false);
         RepoViewHolder viewHolder = new RepoViewHolder(view);
         view.setTag(viewHolder);

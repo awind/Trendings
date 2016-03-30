@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trendings</string>
+    <string name="app_name">Trending</string>
 
     <!-- repo -->
     <string name="repo_title">%1$s/</string>
@@ -8,10 +8,15 @@
     <string name="repo_item_like">Like</string>
     <string name="repo_item_liked">Liked</string>
 
+    <string name="title_activity_developer">Developers</string>
+    <string name="title_activity_repo">Repositories</string>
+
+
 
     <string name="settings_title">Settings</string>
     <string name="about_title">About</string>
     <string name="languages_title">Languages</string>
+    <string name="menu_others">Others</string>
 
     <string name="image_base_url">http://7xs2pw.com1.z0.glb.clouddn.com/%1$s.png</string>
 
@@ -108,16 +113,20 @@
                 <li><a href="https://github.com/bumptech/glide">bumptech / glide</a></li>
                 <li><a href="https://github.com/google/dagger">google / Dagger</a></li>
             </ul>
+
+            <br />
+            <br />
+            <br />
         </body>
     </html>
     ]]></string>
-    <string name="title_activity_main2">DeveloperActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_daily">daily</string>
     <string name="action_weekly">weekly</string>
     <string name="action_monthly">monthly</string>
+
 
 
 </resources>

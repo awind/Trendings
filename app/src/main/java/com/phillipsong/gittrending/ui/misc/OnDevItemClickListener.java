@@ -13,27 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.inject.modules;
+package com.phillipsong.gittrending.ui.misc;
 
-import com.phillipsong.gittrending.ui.activity.DeveloperActivity;
-
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
-
-@Module
-public class DeveloperActivityModule {
-
-    private DeveloperActivity mDeveloperActivity;
-
-    public DeveloperActivityModule(DeveloperActivity developerActivity) {
-        this.mDeveloperActivity = developerActivity;
-    }
-
-    @Provides
-    @Singleton
-    DeveloperActivity provideDeveloperActivity() {
-        return mDeveloperActivity;
-    }
+public interface OnDevItemClickListener {
+    void onItemClick(int position);
 }

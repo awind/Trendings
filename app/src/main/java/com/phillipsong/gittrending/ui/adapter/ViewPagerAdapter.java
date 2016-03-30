@@ -15,28 +15,20 @@
  */
 package com.phillipsong.gittrending.ui.adapter;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
-import com.phillipsong.gittrending.ui.fragment.RepoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
+public abstract class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private List<String> mFragmentTitleList = new ArrayList<>();
+    protected List<String> mFragmentTitleList = new ArrayList<>();
 
-    private String mSince = "daily";
+    protected String mSince = "daily";
 
     public ViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        return RepoFragment.newInstance(mFragmentTitleList.get(position), mSince);
     }
 
     @Override

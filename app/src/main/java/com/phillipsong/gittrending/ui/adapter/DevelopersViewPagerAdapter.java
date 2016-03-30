@@ -13,27 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.inject.modules;
+package com.phillipsong.gittrending.ui.adapter;
 
-import com.phillipsong.gittrending.ui.activity.DeveloperActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
-import javax.inject.Singleton;
+import com.phillipsong.gittrending.ui.fragment.DeveloperFragment;
 
-import dagger.Module;
-import dagger.Provides;
+public class DevelopersViewPagerAdapter extends ViewPagerAdapter {
 
-@Module
-public class DeveloperActivityModule {
 
-    private DeveloperActivity mDeveloperActivity;
-
-    public DeveloperActivityModule(DeveloperActivity developerActivity) {
-        this.mDeveloperActivity = developerActivity;
+    public DevelopersViewPagerAdapter(FragmentManager fragmentManager) {
+        super(fragmentManager);
     }
 
-    @Provides
-    @Singleton
-    DeveloperActivity provideDeveloperActivity() {
-        return mDeveloperActivity;
+    @Override
+    public Fragment getItem(int position) {
+        return DeveloperFragment.newInstance(mFragmentTitleList.get(position), mSince);
     }
 }

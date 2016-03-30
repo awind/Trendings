@@ -31,7 +31,7 @@
 
         <activity
             android:name=".ui.activity.DeveloperActivity"
-            android:label="@string/title_activity_main2"
+            android:label="@string/title_activity_developer"
             android:theme="@style/AppTheme">
         </activity>
     </application>

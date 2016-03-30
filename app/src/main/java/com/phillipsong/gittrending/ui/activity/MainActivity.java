@@ -21,20 +21,11 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
@@ -43,7 +34,7 @@ import com.phillipsong.gittrending.data.models.Language;
 import com.phillipsong.gittrending.inject.components.AppComponent;
 import com.phillipsong.gittrending.inject.components.DaggerMainActivityComponent;
 import com.phillipsong.gittrending.inject.modules.MainActivityModule;
-import com.phillipsong.gittrending.ui.adapter.ViewPagerAdapter;
+import com.phillipsong.gittrending.ui.adapter.RepoViewPagerAdapter;
 import com.phillipsong.gittrending.ui.fragment.RepoFragment;
 
 import javax.inject.Inject;
@@ -69,7 +60,7 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private ViewPagerAdapter mPagerAdapter;
+    private RepoViewPagerAdapter mPagerAdapter;
 
     private String mSince = "daily";
 
@@ -79,6 +70,7 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
         setContentView(R.layout.activity_main);
         super.onCreateDrawer();
         mNavigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.getMenu().getItem(0).setChecked(true);
         boolean isUsed = mSharedPreferences.getBoolean(IS_USED, false);
         if (!isUsed) {
             initDefaultTab();
@@ -116,9 +108,10 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
     }
 
     private void initViews() {
+        mToolbar.setTitle(R.string.title_activity_repo);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
-        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mPagerAdapter = new RepoViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
         setupViewPager();
         mTabLayout.setupWithViewPager(mViewPager);
@@ -205,7 +198,7 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
             startActivity(intent);
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, LanguagesActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_LANGUAGE);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

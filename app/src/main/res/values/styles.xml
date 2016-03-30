@@ -7,6 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="actionOverflowButtonStyle">@style/OverFlow</item>
     </style>
 
 
@@ -18,6 +19,10 @@
         <item name="android:background">?android:selectableItemBackground</item>
         <item name="android:dropDownSelector">?android:selectableItemBackground</item>
         <item name="android:divider">@null</item>
+    </style>
+
+    <style name="OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_since</item>
     </style>
 
 </resources>
