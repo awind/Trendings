@@ -34,14 +34,7 @@ import com.phillipsong.gittrending.ui.widget.AvatarContainer;
 
 import java.util.List;
 
-public class RepoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    public static class FootViewHolder extends RecyclerView.ViewHolder {
-
-        public FootViewHolder(View view) {
-            super(view);
-        }
-    }
+public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoViewHolder> {
 
     public static class RepoViewHolder extends RecyclerView.ViewHolder {
         private TextView mOwner;
@@ -106,9 +99,6 @@ public class RepoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private static final int TYPE_FOOTER = 0;
-    private static final int TYPE_CONTENT = 1;
-
     private Context mContext;
     private List<Repo> mRepos;
     private OnRepoItemClickListener mListener;
@@ -120,14 +110,8 @@ public class RepoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        if (viewType == TYPE_FOOTER) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer,
-                    parent, false);
-            return new FootViewHolder(view);
-        }
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_repo,
+    public RepoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_repo,
                 parent, false);
         RepoViewHolder viewHolder = new RepoViewHolder(view);
         view.setTag(viewHolder);
@@ -135,22 +119,14 @@ public class RepoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        int type = getItemViewType(position);
-        if (type == TYPE_CONTENT) {
-            Repo repo = mRepos.get(position);
-            ((RepoViewHolder) holder).bind(mContext, repo, position, mListener);
-        }
+    public void onBindViewHolder(RepoViewHolder holder, int position) {
+        Repo repo = mRepos.get(position);
+        holder.bind(mContext, repo, position, mListener);
     }
 
     @Override
     public int getItemCount() {
-        return mRepos == null ? 0 : mRepos.size() + 1;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return (position == getItemCount() - 1) ? TYPE_FOOTER : TYPE_CONTENT;
+        return mRepos == null ? 0 : mRepos.size();
     }
 
     public void setItemClickListener(OnRepoItemClickListener listener) {

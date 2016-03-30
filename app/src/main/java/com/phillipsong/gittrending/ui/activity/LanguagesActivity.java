@@ -17,7 +17,6 @@ package com.phillipsong.gittrending.ui.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
@@ -118,8 +117,6 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
                 .subscribe(mUpdateAction, mThrowableAction);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
-        mRecyclerView.setLayoutManager(layoutManager);
         mLanguageAdapter = new LanguageAdapter(mContext, mLanguageList, this);
         mRecyclerView.setAdapter(mLanguageAdapter);
     }
