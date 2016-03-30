@@ -30,7 +30,7 @@ import com.phillipsong.gittrending.ui.misc.OnDevItemClickListener;
 
 import java.util.List;
 
-public class DeveloperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DeveloperAdapter extends RecyclerView.Adapter<DeveloperAdapter.DeveloperViewHolder> {
 
     public static class DeveloperViewHolder extends RecyclerView.ViewHolder {
         private TextView mRank;
@@ -71,9 +71,6 @@ public class DeveloperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public static final int TYPE_CONTENT = 0;
-    public static final int TYPE_FOOTER = 1;
-
     private Context mContext;
     private List<User> mUserList;
     private OnDevItemClickListener mListener;
@@ -85,14 +82,8 @@ public class DeveloperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        if (viewType == TYPE_FOOTER) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer,
-                    parent, false);
-            return new RepoAdapter.FootViewHolder(view);
-        }
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_developer,
+    public DeveloperViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_developer,
                 parent, false);
         DeveloperViewHolder viewHolder = new DeveloperViewHolder(view);
         view.setTag(viewHolder);
@@ -100,21 +91,13 @@ public class DeveloperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        int type = getItemViewType(position);
-        if (type == TYPE_CONTENT) {
-            User user = mUserList.get(position);
-            ((DeveloperViewHolder) holder).bindItem(mContext, user, position, mListener);
-        }
+    public void onBindViewHolder(DeveloperViewHolder holder, int position) {
+        User user = mUserList.get(position);
+        holder.bindItem(mContext, user, position, mListener);
     }
 
     @Override
     public int getItemCount() {
-        return mUserList == null ? 0 : mUserList.size() + 1;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return (position == getItemCount() - 1) ? TYPE_FOOTER : TYPE_CONTENT;
+        return mUserList == null ? 0 : mUserList.size();
     }
 }

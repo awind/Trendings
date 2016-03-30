@@ -21,7 +21,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,8 +131,6 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mRecyclerView.setNestedScrollingEnabled(true);
         }
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
-        mRecyclerView.setLayoutManager(layoutManager);
         mRepoList = new ArrayList<>();
         mRepoAdapter = new RepoAdapter(mContext, mRepoList, this);
         mRecyclerView.setAdapter(mRepoAdapter);
