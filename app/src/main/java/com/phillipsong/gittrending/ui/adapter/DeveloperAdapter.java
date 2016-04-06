@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.data.models.User;
-import com.phillipsong.gittrending.ui.misc.OnDevItemClickListener;
+import com.phillipsong.gittrending.ui.misc.OnItemClickListener;
 
 import java.util.List;
 
@@ -52,7 +52,7 @@ public class DeveloperAdapter extends RecyclerView.Adapter<DeveloperAdapter.Deve
         }
 
         public void bindItem(Context context, User user, int position,
-                             OnDevItemClickListener listener) {
+                             OnItemClickListener listener) {
             mRank.setText(String.valueOf(user.getRank()));
             Glide.with(context)
                     .load(user.getAvatar())
@@ -73,9 +73,9 @@ public class DeveloperAdapter extends RecyclerView.Adapter<DeveloperAdapter.Deve
 
     private Context mContext;
     private List<User> mUserList;
-    private OnDevItemClickListener mListener;
+    private OnItemClickListener mListener;
 
-    public DeveloperAdapter(Context context, List<User> list, OnDevItemClickListener listener) {
+    public DeveloperAdapter(Context context, List<User> list, OnItemClickListener listener) {
         mContext = context;
         mUserList = list;
         mListener = listener;

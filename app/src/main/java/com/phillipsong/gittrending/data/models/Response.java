@@ -17,13 +17,10 @@ package com.phillipsong.gittrending.data.models;
 
 import java.util.List;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-
-public class Trending extends RealmObject {
+public class Response<T> {
     private String status;
     private int count;
-    private RealmList<Repo> items;
+    private List<T> items;
 
     public String getStatus() {
         return status;
@@ -41,17 +38,17 @@ public class Trending extends RealmObject {
         this.count = count;
     }
 
-    public List<Repo> getItems() {
+    public List<T> getItems() {
         return items;
     }
 
-    public void setItems(RealmList<Repo> items) {
+    public void setItems(List<T> items) {
         this.items = items;
     }
 
     @Override
     public String toString() {
-        return "Trending{" +
+        return "TrendingResponse{" +
                 "status='" + status + '\'' +
                 ", count=" + count +
                 ", items=" + items +

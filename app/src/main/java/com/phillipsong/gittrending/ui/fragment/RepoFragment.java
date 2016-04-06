@@ -29,18 +29,16 @@ import android.view.ViewGroup;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.crashlytics.android.answers.CustomEvent;
-import com.crashlytics.android.answers.ShareEvent;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.api.TrendingService;
 import com.phillipsong.gittrending.data.models.Repo;
-import com.phillipsong.gittrending.data.models.Trending;
 import com.phillipsong.gittrending.inject.components.AppComponent;
 import com.phillipsong.gittrending.inject.components.DaggerRepoFragmentComponent;
 import com.phillipsong.gittrending.inject.modules.RepoFragmentModule;
 import com.phillipsong.gittrending.ui.adapter.RepoAdapter;
-import com.phillipsong.gittrending.ui.misc.OnRepoItemClickListener;
+import com.phillipsong.gittrending.ui.misc.OnItemClickListener;
 import com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout;
 import com.phillipsong.gittrending.utils.Constants;
 
@@ -50,13 +48,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class RepoFragment extends BaseFragment implements OnRepoItemClickListener {
+public class RepoFragment extends BaseFragment implements OnItemClickListener {
 
     private static final String TAG = "RepoFragment";
 
@@ -144,7 +141,7 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aVoid -> mSwipeRefreshLayout.setRefreshing(false))
                 .retry()
-                .flatMap(this::checkFavorite)
+                .flatMap(response -> Observable.just(response.getItems()))
                 .subscribe(mUpdateAction, mThrowableAction);
     }
 
@@ -157,59 +154,10 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
                 .doOnSubscribe(() -> mSwipeRefreshLayout.setRefreshing(true))
                 .doOnCompleted(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .doOnError(error -> mSwipeRefreshLayout.setRefreshing(false))
-                .flatMap(this::checkFavorite)
+                .flatMap(response -> Observable.just(response.getItems()))
                 .subscribe(mUpdateAction, mThrowableAction);
     }
 
-    @Override
-    public void onFavoriteClick(int position) {
-        if (mRepoList == null || mRepoList.size() == 0) {
-            return;
-        }
-
-        Repo repo = mRepoList.get(position);
-        mRealm.where(Repo.class).equalTo("url", repo.getUrl()).findAllAsync()
-                .asObservable()
-                .filter(RealmResults::isLoaded)
-                .first()
-                .subscribe(repos -> {
-                    if (repos.size() > 0) {
-                        mRealm.beginTransaction();
-                        repo.setIsFavorited(false);
-                        repos.removeLast();
-                        mRealm.commitTransaction();
-                    } else if (repos.size() == 0) {
-                        mRealm.beginTransaction();
-                        repo.setIsFavorited(true);
-                        mRealm.copyToRealm(repo);
-                        mRealm.commitTransaction();
-                    }
-                    mRepoAdapter.notifyItemChanged(position);
-                });
-
-        Answers.getInstance().logCustom(new CustomEvent("Favorite")
-                .putCustomAttribute("name", repo.getUrl())
-                .putCustomAttribute("id", mLanguage)
-                .putCustomAttribute("type", TAG));
-    }
-
-    @Override
-    public void onShareClick(int position) {
-        if (mRepoList == null || mRepoList.size() == 0) {
-            return;
-        }
-        Repo repo = mRepoList.get(position);
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, Constants.GITHUB_BASE_URL + repo.getUrl());
-        sendIntent.setType("text/plain");
-        startActivity(sendIntent);
-
-        Answers.getInstance().logShare(new ShareEvent()
-                .putContentType(TAG)
-                .putContentId(mLanguage)
-                .putContentName(repo.getUrl()));
-    }
 
     @Override
     public void onItemClick(int position) {
@@ -224,17 +172,6 @@ public class RepoFragment extends BaseFragment implements OnRepoItemClickListene
         Answers.getInstance().logContentView(new ContentViewEvent()
                 .putContentName(repo.getUrl())
                 .putContentType(TAG));
-    }
-
-    private Observable<List<Repo>> checkFavorite(Trending trending) {
-        for (Repo repo : trending.getItems()) {
-            RealmResults<Repo> repos = mRealm.where(Repo.class)
-                    .equalTo("url", repo.getUrl()).findAll();
-            if (repos.size() > 0) {
-                repo.setIsFavorited(true);
-            }
-        }
-        return Observable.just(trending.getItems());
     }
 
 }

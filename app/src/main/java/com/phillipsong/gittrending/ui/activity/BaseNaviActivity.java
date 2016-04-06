@@ -48,7 +48,7 @@ public class BaseNaviActivity extends BaseActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         RxView.clicks(fab)
                 .subscribe(aVoid -> {
-                    Intent intent = new Intent(this, FavoriteActivity.class);
+                    Intent intent = new Intent(this, LanguagesActivity.class);
                     startActivity(intent);
                 });
     }

@@ -15,9 +15,10 @@
  */
 package com.phillipsong.gittrending.data.api;
 
-import com.phillipsong.gittrending.data.models.Developers;
+import com.phillipsong.gittrending.data.models.Repo;
 import com.phillipsong.gittrending.data.models.Support;
-import com.phillipsong.gittrending.data.models.Trending;
+import com.phillipsong.gittrending.data.models.Response;
+import com.phillipsong.gittrending.data.models.User;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -26,13 +27,13 @@ import rx.Observable;
 public interface TrendingService {
 
     @GET("/v2")
-    Observable<Trending> getTrending(@Query("language") String language,
+    Observable<Response<Repo>> getTrending(@Query("language") String language,
                                      @Query("since") String since);
 
     @GET("/v2/support")
     Observable<Support> getSupport();
 
     @GET("/v2/developers")
-    Observable<Developers> getDevelopers(@Query("language") String language,
+    Observable<Response<User>> getDevelopers(@Query("language") String language,
                                          @Query("since") String since);
 }

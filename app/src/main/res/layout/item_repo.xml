@@ -61,6 +61,7 @@
 
        <RelativeLayout
            android:layout_marginTop="20dp"
+           android:layout_marginBottom="16dp"
            android:orientation="horizontal"
            android:layout_width="match_parent"
            android:layout_height="wrap_content">
@@ -98,47 +99,6 @@
                android:layout_height="wrap_content"/>
 
        </RelativeLayout>
-
-       <View
-           android:layout_marginTop="8dp"
-           android:layout_marginLeft="16dp"
-           android:layout_marginRight="16dp"
-           android:background="@color/bg_main"
-           android:layout_width="match_parent"
-           android:layout_height="1dp"/>
-
-       <RelativeLayout
-           android:layout_marginBottom="4dp"
-           android:orientation="horizontal"
-           android:layout_width="match_parent"
-           android:layout_height="48dp">
-
-           <TextView
-               android:id="@+id/share"
-               android:textSize="14sp"
-               android:textColor="@color/text_color_black"
-               android:text="@string/repo_item_share"
-               android:paddingStart="16dp"
-               android:textStyle="bold"
-               android:gravity="center_vertical"
-               android:layout_width="wrap_content"
-               android:layout_height="match_parent"/>
-
-
-           <TextView
-               android:id="@+id/favorite"
-               android:textSize="14sp"
-               android:textColor="@color/text_color_black"
-               android:text="@string/repo_item_like"
-               android:textStyle="bold"
-               android:layout_alignParentEnd="true"
-               android:layout_marginEnd="28dp"
-               android:gravity="center_vertical"
-               android:layout_width="wrap_content"
-               android:layout_height="match_parent"/>
-
-       </RelativeLayout>
-
 
    </LinearLayout>
 

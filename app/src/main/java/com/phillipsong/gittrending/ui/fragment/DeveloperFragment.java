@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.crashlytics.android.answers.CustomEvent;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 import com.phillipsong.gittrending.R;
@@ -37,7 +38,7 @@ import com.phillipsong.gittrending.inject.components.AppComponent;
 import com.phillipsong.gittrending.inject.components.DaggerDeveloperFragmentComponent;
 import com.phillipsong.gittrending.inject.modules.DeveloperFragmentModule;
 import com.phillipsong.gittrending.ui.adapter.DeveloperAdapter;
-import com.phillipsong.gittrending.ui.misc.OnDevItemClickListener;
+import com.phillipsong.gittrending.ui.misc.OnItemClickListener;
 import com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout;
 import com.phillipsong.gittrending.utils.Constants;
 
@@ -52,7 +53,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class DeveloperFragment extends BaseFragment implements OnDevItemClickListener {
+public class DeveloperFragment extends BaseFragment implements OnItemClickListener {
     private static final String TAG = "RepoFragment";
 
     private static final String LANGUAGE = "language";
@@ -165,5 +166,9 @@ public class DeveloperFragment extends BaseFragment implements OnDevItemClickLis
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(Constants.GITHUB_BASE_URL + user.getUrl()));
         startActivity(i);
+
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName(user.getUrl())
+                .putContentType(TAG));
     }
 }

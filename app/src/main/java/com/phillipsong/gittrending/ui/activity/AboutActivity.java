@@ -23,11 +23,9 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding.support.v7.widget.RxToolbar;
 import com.phillipsong.gittrending.BuildConfig;
 import com.phillipsong.gittrending.R;
-import com.phillipsong.gittrending.inject.components.AppComponent;
-import com.phillipsong.gittrending.inject.components.DaggerAboutActivityComponent;
-import com.phillipsong.gittrending.inject.modules.AboutActivityModule;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
-public class AboutActivity extends BaseActivity {
+public class AboutActivity extends RxAppCompatActivity {
 
     private Toolbar mToolbar;
     private WebView mWebView;
@@ -38,15 +36,6 @@ public class AboutActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         initViews();
-    }
-
-    @Override
-    protected void setupActivityComponent(AppComponent appComponent) {
-        DaggerAboutActivityComponent.builder()
-                .appComponent(appComponent)
-                .aboutActivityModule(new AboutActivityModule(this))
-                .build()
-                .inject(this);
     }
 
     private void initViews() {

@@ -18,10 +18,9 @@ package com.phillipsong.gittrending.data.models;
 import java.util.List;
 
 import io.realm.RealmList;
-import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Repo extends RealmObject {
+public class Repo {
 
     private String name;
     private String owner;

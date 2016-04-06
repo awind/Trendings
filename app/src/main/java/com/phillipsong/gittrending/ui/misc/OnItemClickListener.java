@@ -13,27 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.inject.modules;
+package com.phillipsong.gittrending.ui.misc;
 
-import com.phillipsong.gittrending.ui.activity.FavoriteActivity;
-
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
-
-@Module
-public class FavoriteActivityModule {
-
-    FavoriteActivity mFavoriteActivity;
-
-    public FavoriteActivityModule(FavoriteActivity favoriteActivity) {
-        this.mFavoriteActivity = favoriteActivity;
-    }
-
-    @Singleton
-    @Provides
-    public FavoriteActivity provideFavoriteActivity() {
-        return mFavoriteActivity;
-    }
+public interface OnItemClickListener {
+    void onItemClick(int position);
 }
