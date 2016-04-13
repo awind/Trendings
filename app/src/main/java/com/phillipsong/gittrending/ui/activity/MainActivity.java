@@ -196,9 +196,6 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
         } else if (id == R.id.nav_about) {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_settings) {
-            Intent intent = new Intent(this, LanguagesActivity.class);
-            startActivityForResult(intent, REQUEST_LANGUAGE);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
