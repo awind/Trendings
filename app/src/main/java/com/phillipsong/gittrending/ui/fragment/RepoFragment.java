@@ -129,7 +129,7 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener {
         mRepoAdapter = new RepoAdapter(mContext, mRepoList, this);
         mRecyclerView.setAdapter(mRepoAdapter);
 
-        updateData(mSince);
+        updateData(mLanguage, mSince);
 
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
                 .compose(bindToLifecycle())
@@ -142,7 +142,8 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener {
                 .subscribe(mUpdateAction, mThrowableAction);
     }
 
-    public void updateData(String since) {
+    public void updateData(String language, String since) {
+        mLanguage = language;
         mSince = since;
         mTrendingApi.getTrending(mLanguage, mSince)
                 .compose(bindToLifecycle())

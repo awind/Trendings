@@ -21,4 +21,8 @@ public class Constants {
 
     public static final String GITHUB_BASE_URL = "https://github.com";
 
+    public static final String[] LANGUAGE_LIST = new String[] {"All", "Java", "Objective-C",
+            "JavaScript", "Python", "Swift", "C#", "Ruby", "Php", "Go", "C", "Cpp", "Kotlin",
+            "Perl", "Scala", "Groovy", "CoffeeScript", "Lua", "Shell", "CSS", "Html"};
+
 }

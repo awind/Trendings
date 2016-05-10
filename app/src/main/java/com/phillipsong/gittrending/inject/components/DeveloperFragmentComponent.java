@@ -23,7 +23,7 @@ import dagger.Component;
 
 @PerFragment
 @Component(modules = DeveloperFragmentModule.class, dependencies = AppComponent.class)
-public interface DeveloperFragmentComponent extends DeveloperActivityComponent {
+public interface DeveloperFragmentComponent extends MainActivityComponent {
 
     void inject(DeveloperFragment fragment);
 }

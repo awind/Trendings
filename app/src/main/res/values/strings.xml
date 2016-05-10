@@ -127,6 +127,11 @@
     <string name="action_weekly">weekly</string>
     <string name="action_monthly">monthly</string>
 
-
+    <!-- string picker -->
+    <string name="string_picker_dialog_values">STRING_PICKER_DIALOG_VALUES</string>
+    <string name="string_picker_dialog_current_index">STRING_PICKER_DIALOG_CURRENT_INDEX</string>
+    <string name="string_picker_dialog_title"></string>
+    <string name="string_picker_dialog_ok">OK</string>
+    <string name="string_picker_dialog_cancel">Cancel</string>
 
 </resources>

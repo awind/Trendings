@@ -28,11 +28,6 @@
             android:name="io.fabric.ApiKey"
             android:value="a8dbb91c6c25377d1cb8886e9939d5d015d59c3a"/>
 
-        <activity
-            android:name=".ui.activity.DeveloperActivity"
-            android:label="@string/title_activity_developer"
-            android:theme="@style/AppTheme">
-        </activity>
     </application>
 
 </manifest>

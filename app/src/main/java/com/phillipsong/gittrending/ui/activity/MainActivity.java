@@ -15,17 +15,16 @@
  */
 package com.phillipsong.gittrending.ui.activity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
@@ -33,18 +32,22 @@ import com.phillipsong.gittrending.data.api.TrendingService;
 import com.phillipsong.gittrending.inject.components.AppComponent;
 import com.phillipsong.gittrending.inject.components.DaggerMainActivityComponent;
 import com.phillipsong.gittrending.inject.modules.MainActivityModule;
-import com.phillipsong.gittrending.ui.adapter.RepoViewPagerAdapter;
+import com.phillipsong.gittrending.ui.fragment.DeveloperFragment;
 import com.phillipsong.gittrending.ui.fragment.RepoFragment;
+import com.phillipsong.gittrending.ui.widget.StringPickerDialog;
+import com.phillipsong.gittrending.utils.Constants;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
+import com.roughike.bottombar.OnTabClickListener;
 
 import javax.inject.Inject;
 
 
-public class MainActivity extends BaseNaviActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements StringPickerDialog.OnClickListener {
 
     private static final String TAG = "MainActivity";
 
     private static final String IS_USED = "used";
-    private static final int REQUEST_LANGUAGE = 10;
 
     @Inject
     TrendingApplication mContext;
@@ -53,24 +56,99 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
     @Inject
     SharedPreferences mSharedPreferences;
 
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
-    private RepoViewPagerAdapter mPagerAdapter;
+    private Toolbar mToolbar;
+    private TextView mTitleTv;
+    private ImageButton mLangBtn;
+    private ImageButton mSinceBtn;
+    private BottomBar mBottomBar;
+    private RepoFragment mRepoFragment;
+    private DeveloperFragment mDevFragment;
 
-    private String mSince = "daily";
+    private String mLanguage = "All";
+    private String mSince = "Daily";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        super.onCreateDrawer();
-        mNavigationView.setNavigationItemSelectedListener(this);
-        mNavigationView.getMenu().getItem(0).setChecked(true);
+        mBottomBar = BottomBar.attachShy((CoordinatorLayout) findViewById(R.id.myCoordinator),
+                null, savedInstanceState);
+
+        initViews();
+
         boolean isUsed = mSharedPreferences.getBoolean(IS_USED, false);
         if (!isUsed) {
             mSharedPreferences.edit().putBoolean(IS_USED, true).apply();
         }
-        initViews();
+    }
+
+    private void initViews() {
+        mBottomBar.setItems(
+                new BottomBarTab(R.mipmap.ic_repos, "Repository"),
+                new BottomBarTab(R.mipmap.ic_users, "Developer"),
+                new BottomBarTab(R.mipmap.ic_search, "Search"),
+                new BottomBarTab(R.mipmap.ic_settings, "Settings")
+        );
+        mBottomBar.mapColorForTab(0, ContextCompat.getColor(mContext, R.color.bottom_bar_tab_0));
+        mBottomBar.mapColorForTab(1, ContextCompat.getColor(mContext, R.color.bottom_bar_tab_1));
+        mBottomBar.mapColorForTab(2, ContextCompat.getColor(mContext, R.color.bottom_bar_tab_2));
+        mBottomBar.mapColorForTab(3, ContextCompat.getColor(mContext, R.color.bottom_bar_tab_3));
+
+        mBottomBar.setOnTabClickListener(new OnTabClickListener() {
+            @Override
+            public void onTabSelected(int position) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                switch (position) {
+                    case 0:
+                        if (mRepoFragment == null) {
+                            mRepoFragment = RepoFragment.newInstance(mLanguage.toLowerCase(), mSince.toLowerCase());
+                        }
+                        transaction.replace(R.id.main_content, mRepoFragment);
+                        break;
+                    case 1:
+                        if (mDevFragment == null) {
+                            mDevFragment = DeveloperFragment.newInstance(mLanguage.toLowerCase(), mSince.toLowerCase());
+                        }
+                        transaction.replace(R.id.main_content, mDevFragment);
+                        break;
+                    default:
+                        break;
+                }
+                transaction.commit();
+            }
+
+            @Override
+            public void onTabReSelected(int position) {
+
+            }
+        });
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mTitleTv = (TextView) findViewById(R.id.title);
+        mTitleTv.setText(mLanguage);
+        setSupportActionBar(mToolbar);
+
+        mLangBtn = (ImageButton) findViewById(R.id.language_btn);
+        mSinceBtn = (ImageButton) findViewById(R.id.since_btn);
+        mLangBtn.setOnClickListener(v -> {
+            StringPickerDialog dialog = new StringPickerDialog();
+            Bundle bundle = new Bundle();
+            bundle.putStringArray(getString(R.string.string_picker_dialog_values), Constants.LANGUAGE_LIST);
+            bundle.putInt(getString(R.string.string_picker_dialog_current_index), 2);
+            dialog.setArguments(bundle);
+            dialog.show(getSupportFragmentManager(), TAG);
+        });
+        mSinceBtn.setOnClickListener(v -> {
+
+        });
+    }
+
+    @Override
+    public void onClick(String value) {
+        mLanguage = value;
+        mTitleTv.setText(mLanguage);
+        mRepoFragment.updateData(mLanguage.toLowerCase(), mSince.toLowerCase());
     }
 
     @Override
@@ -80,105 +158,5 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
                 .mainActivityModule(new MainActivityModule(this))
                 .build()
                 .inject(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    private void initViews() {
-        mToolbar.setTitle(R.string.title_activity_repo);
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        mTabLayout = (TabLayout) findViewById(R.id.tabs);
-        mPagerAdapter = new RepoViewPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mPagerAdapter);
-        setupViewPager();
-        mTabLayout.setupWithViewPager(mViewPager);
-    }
-
-    private void setupViewPager() {
-        clearFragment();
-
-        mPagerAdapter.addFragment("all");
-        mPagerAdapter.addFragment("java");
-        mPagerAdapter.addFragment("swift");
-
-        mPagerAdapter.setSince(mSince);
-        mPagerAdapter.notifyDataSetChanged();
-        mViewPager.setCurrentItem(0);
-        mTabLayout.setupWithViewPager(mViewPager);
-    }
-
-    private void clearFragment() {
-        for (int i = 0; i < mPagerAdapter.getCount(); i++) {
-            Fragment fragment = getSupportFragmentManager()
-                    .findFragmentByTag(mPagerAdapter.getFragmentTag(R.id.view_pager, i));
-            if (fragment instanceof RepoFragment) {
-                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-            }
-        }
-        mPagerAdapter.clearFragmentList();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    private void updateSince() {
-        for (int i = 0; i < mPagerAdapter.getCount(); i++) {
-            Fragment fragment = getSupportFragmentManager()
-                    .findFragmentByTag(mPagerAdapter.getFragmentTag(R.id.view_pager, i));
-            if (fragment instanceof RepoFragment) {
-                if (fragment.isAdded()) {
-                    ((RepoFragment) fragment).updateData(mSince);
-                }
-            }
-        }
-        mPagerAdapter.setSince(mSince);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        mSince = item.getTitle().toString();
-        updateSince();
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_LANGUAGE && resultCode == RESULT_OK) {
-            setupViewPager();
-        }
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_trending) {
-        } else if (id == R.id.nav_developer) {
-            Intent intent = new Intent(this, DeveloperActivity.class);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-            finish();
-        } else if (id == R.id.nav_about) {
-            Intent intent = new Intent(this, AboutActivity.class);
-            startActivity(intent);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }
