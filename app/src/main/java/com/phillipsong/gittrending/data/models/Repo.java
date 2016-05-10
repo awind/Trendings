@@ -17,19 +17,15 @@ package com.phillipsong.gittrending.data.models;
 
 import java.util.List;
 
-import io.realm.RealmList;
-import io.realm.annotations.PrimaryKey;
-
 public class Repo {
 
     private String name;
     private String owner;
     private String star;
-    @PrimaryKey
     private String url;
     private String language;
     private String description;
-    private RealmList<Contributor> contributors;
+    private List<Contributor> contributors;
     private boolean isFavorited;
 
     public String getName() {
@@ -84,7 +80,7 @@ public class Repo {
         return contributors;
     }
 
-    public void setContributors(RealmList<Contributor> contributors) {
+    public void setContributors(List<Contributor> contributors) {
         this.contributors = contributors;
     }
 

@@ -41,8 +41,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -56,8 +54,6 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
     TrendingApplication mContext;
     @Inject
     TrendingService mTrendingApi;
-    @Inject
-    Realm mRealm;
 
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
@@ -113,7 +109,6 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aVoid -> mSwipeRefreshLayout.setRefreshing(false))
                 .retry()
-                .flatMap(this::checkLanguage)
                 .subscribe(mUpdateAction, mThrowableAction);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -129,38 +124,13 @@ public class LanguagesActivity extends BaseActivity implements OnLanguageClickLi
                 .doOnSubscribe(() -> mSwipeRefreshLayout.setRefreshing(true))
                 .doOnCompleted(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .doOnError(error -> mSwipeRefreshLayout.setRefreshing(false))
-                .flatMap(this::checkLanguage)
                 .subscribe(mUpdateAction, mThrowableAction);
     }
 
-    private Observable<Support> checkLanguage(Support support) {
-        for (Language language : support.getItems()) {
-            RealmResults<Language> languages = mRealm.where(Language.class)
-                    .equalTo("name", language.getName()).findAll();
-            if (languages.size() > 0) {
-                language.setIsSelect(true);
-            }
-        }
-        return Observable.just(support);
-    }
 
     @Override
     public void onItemClick(int position, boolean isChecked) {
-        if (mLanguageList == null || mLanguageList.size() == 0) {
-            return;
-        }
 
-        Language language = mLanguageList.get(position);
-        RealmResults<Language> languages = mRealm.where(Language.class)
-                .equalTo("name", language.getName()).findAll();
-        mRealm.beginTransaction();
-        if (!isChecked) {
-            languages.removeLast();
-        } else {
-            mRealm.copyToRealm(language);
-        }
-        mRealm.commitTransaction();
-        isChanged = true;
     }
 
     @Override

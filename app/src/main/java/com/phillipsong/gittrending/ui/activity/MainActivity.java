@@ -30,7 +30,6 @@ import android.view.MenuItem;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.api.TrendingService;
-import com.phillipsong.gittrending.data.models.Language;
 import com.phillipsong.gittrending.inject.components.AppComponent;
 import com.phillipsong.gittrending.inject.components.DaggerMainActivityComponent;
 import com.phillipsong.gittrending.inject.modules.MainActivityModule;
@@ -39,8 +38,6 @@ import com.phillipsong.gittrending.ui.fragment.RepoFragment;
 
 import javax.inject.Inject;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class MainActivity extends BaseNaviActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -53,8 +50,6 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
     TrendingApplication mContext;
     @Inject
     TrendingService mTrendingApi;
-    @Inject
-    Realm mRealm;
     @Inject
     SharedPreferences mSharedPreferences;
 
@@ -73,7 +68,6 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
         mNavigationView.getMenu().getItem(0).setChecked(true);
         boolean isUsed = mSharedPreferences.getBoolean(IS_USED, false);
         if (!isUsed) {
-            initDefaultTab();
             mSharedPreferences.edit().putBoolean(IS_USED, true).apply();
         }
         initViews();
@@ -97,16 +91,6 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
         }
     }
 
-    private void initDefaultTab() {
-        String[] languages = {"all", "java", "swift", "javascript", "objective-c", "python"};
-        for (String lang : languages) {
-            Language language = new Language(lang, mSince, true);
-            mRealm.beginTransaction();
-            mRealm.copyToRealm(language);
-            mRealm.commitTransaction();
-        }
-    }
-
     private void initViews() {
         mToolbar.setTitle(R.string.title_activity_repo);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -119,16 +103,11 @@ public class MainActivity extends BaseNaviActivity implements NavigationView.OnN
 
     private void setupViewPager() {
         clearFragment();
-        RealmResults<Language> languages = mRealm.where(Language.class).findAll();
-        if (languages.size() > 0) {
-            for (Language language : languages) {
-                mPagerAdapter.addFragment(language.getName().toLowerCase());
-            }
-        } else {
-            mPagerAdapter.addFragment("all");
-            mPagerAdapter.addFragment("java");
-            mPagerAdapter.addFragment("swift");
-        }
+
+        mPagerAdapter.addFragment("all");
+        mPagerAdapter.addFragment("java");
+        mPagerAdapter.addFragment("swift");
+
         mPagerAdapter.setSince(mSince);
         mPagerAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(0);

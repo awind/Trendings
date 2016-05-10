@@ -47,7 +47,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.realm.Realm;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -69,8 +68,6 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener {
     TrendingApplication mContext;
     @Inject
     TrendingService mTrendingApi;
-    @Inject
-    Realm mRealm;
 
     private String mLanguage;
     private String mSince;

@@ -15,9 +15,7 @@
  */
 package com.phillipsong.gittrending.data.models;
 
-import io.realm.RealmObject;
-
-public class Contributor extends RealmObject {
+public class Contributor {
 
     private String username;
     private String avatar;

@@ -24,26 +24,17 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.rx.RealmObservableFactory;
 
 @Module
 public class AppModule {
 
     private TrendingApplication mApplication;
 
-    private Realm mRealm;
 
     private SharedPreferences mSharedPreferences;
 
     public AppModule(TrendingApplication application) {
         this.mApplication = application;
-
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(application)
-                .rxFactory(new RealmObservableFactory())
-                .build();
-        mRealm = Realm.getInstance(realmConfig);
 
         mSharedPreferences = mApplication.getSharedPreferences("app", Context.MODE_PRIVATE);
     }
@@ -52,12 +43,6 @@ public class AppModule {
     @Singleton
     public TrendingApplication provideTrendingApplication() {
         return mApplication;
-    }
-
-    @Singleton
-    @Provides
-    public Realm provideRealm() {
-        return mRealm;
     }
 
     @Singleton

@@ -25,7 +25,6 @@ import com.phillipsong.gittrending.inject.modules.AppModule;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.realm.Realm;
 
 
 @Singleton
@@ -35,8 +34,6 @@ public interface AppComponent {
     TrendingApplication getApplication();
 
     TrendingService getTrendingService();
-
-    Realm getRealm();
 
     SharedPreferences getSharedPreferences();
 }

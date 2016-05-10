@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.api.TrendingService;
-import com.phillipsong.gittrending.data.models.Language;
 import com.phillipsong.gittrending.inject.components.AppComponent;
 import com.phillipsong.gittrending.inject.components.DaggerDeveloperActivityComponent;
 import com.phillipsong.gittrending.inject.modules.DeveloperActivityModule;
@@ -23,8 +22,6 @@ import com.phillipsong.gittrending.ui.fragment.DeveloperFragment;
 
 import javax.inject.Inject;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class DeveloperActivity extends BaseNaviActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,8 +32,6 @@ public class DeveloperActivity extends BaseNaviActivity
     TrendingApplication mContext;
     @Inject
     TrendingService mTrendingApi;
-    @Inject
-    Realm mRealm;
 
 
     private ViewPager mViewPager;
@@ -66,16 +61,11 @@ public class DeveloperActivity extends BaseNaviActivity
 
     private void setupViewPager() {
         clearFragment();
-        RealmResults<Language> languages = mRealm.where(Language.class).findAll();
-        if (languages.size() > 0) {
-            for (Language language : languages) {
-                mPagerAdapter.addFragment(language.getName().toLowerCase());
-            }
-        } else {
-            mPagerAdapter.addFragment("all");
-            mPagerAdapter.addFragment("java");
-            mPagerAdapter.addFragment("swift");
-        }
+
+        mPagerAdapter.addFragment("all");
+        mPagerAdapter.addFragment("java");
+        mPagerAdapter.addFragment("swift");
+
         mPagerAdapter.setSince(mSince);
         mPagerAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(0);

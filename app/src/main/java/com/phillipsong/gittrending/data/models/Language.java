@@ -15,12 +15,9 @@
  */
 package com.phillipsong.gittrending.data.models;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
-public class Language extends RealmObject {
+public class Language {
 
-    @PrimaryKey
     private String name;
     private String icon;
 

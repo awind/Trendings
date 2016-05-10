@@ -15,13 +15,14 @@
  */
 package com.phillipsong.gittrending.data.models;
 
-import io.realm.RealmList;
+
+import java.util.List;
 
 public class Support {
 
     private String status;
     private int count;
-    private RealmList<Language> items;
+    private List<Language> items;
 
     public String getStatus() {
         return status;
@@ -39,11 +40,11 @@ public class Support {
         this.count = count;
     }
 
-    public RealmList<Language> getItems() {
+    public List<Language> getItems() {
         return items;
     }
 
-    public void setItems(RealmList<Language> items) {
+    public void setItems(List<Language> items) {
         this.items = items;
     }
 
