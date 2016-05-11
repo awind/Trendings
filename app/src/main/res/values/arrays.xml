@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="support_languages">
+
+        <item>All</item>
+        <item>Java</item>
+        <item>Objective-C</item>
+        <item>JavaScript</item>
+        <item>Python</item>
+        <item>Swift</item>
+        <item>C#</item>
+        <item>Ruby</item>
+        <item>PHP</item>
+        <item>Go</item>
+        <item>C</item>
+        <item>Cpp</item>
+        <item>Kotlin</item>
+        <item>Perl</item>
+        <item>Scala</item>
+        <item>Groovy</item>
+        <item>CoffeeScript</item>
+        <item>Lua</item>
+        <item>Shell</item>
+        <item>CSS</item>
+        <item>HTML</item>
+    </string-array>
+
+</resources>

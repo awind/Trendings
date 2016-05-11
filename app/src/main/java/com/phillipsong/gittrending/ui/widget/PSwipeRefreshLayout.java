@@ -19,6 +19,8 @@ import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 
+import com.phillipsong.gittrending.R;
+
 public class PSwipeRefreshLayout extends SwipeRefreshLayout {
 
     private boolean mMeasured = false;
@@ -30,6 +32,8 @@ public class PSwipeRefreshLayout extends SwipeRefreshLayout {
 
     public PSwipeRefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setColorSchemeResources(R.color.bottom_bar_tab_0, R.color.bottom_bar_tab_1,
+                R.color.bottom_bar_tab_2, R.color.bottom_bar_tab_3);
     }
 
     @Override

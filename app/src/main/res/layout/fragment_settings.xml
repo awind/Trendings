@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:fitsSystemWindows="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:paddingTop="25dp">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/layout_toolbar_settings" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <TextView
+        android:id="@+id/share_app"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:paddingLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="17sp"
+        android:textColor="@color/text_color_black"
+        android:text="@string/activity_settings_share_this_app"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+
+
+    <TextView
+        android:id="@+id/rate_app"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:paddingLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="17sp"
+        android:textColor="@color/text_color_black"
+        android:text="@string/activity_settings_rate_this_app"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+
+
+
+    <TextView
+        android:id="@+id/about_author"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:paddingLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="17sp"
+        android:textColor="@color/text_color_black"
+        android:text="@string/activity_settings_about_author"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+
+
+
+</LinearLayout>

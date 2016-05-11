@@ -17,7 +17,6 @@ package com.phillipsong.gittrending.ui.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -132,8 +131,9 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
             StringPickerDialog dialog = new StringPickerDialog();
             dialog.setListener(RepoFragment.this);
             Bundle bundle = new Bundle();
-            bundle.putStringArray(getString(R.string.string_picker_dialog_values), Constants.LANGUAGE_LIST);
-            int index = Arrays.asList(Constants.LANGUAGE_LIST).indexOf(mLanguage);
+            String[] languages = getResources().getStringArray(R.array.support_languages);
+            bundle.putStringArray(getString(R.string.string_picker_dialog_values), languages);
+            int index = Arrays.asList(languages).indexOf(mLanguage);
             bundle.putInt(getString(R.string.string_picker_dialog_current_index), index);
             dialog.setArguments(bundle);
             dialog.show(getChildFragmentManager(), TAG);
@@ -143,7 +143,6 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
         });
 
         mSwipeRefreshLayout = (PSwipeRefreshLayout) view.findViewById(R.id.refresher);
-        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLUE, Color.CYAN);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mRecyclerView.setNestedScrollingEnabled(true);

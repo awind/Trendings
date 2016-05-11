@@ -35,6 +35,7 @@ import com.phillipsong.gittrending.inject.components.DaggerMainActivityComponent
 import com.phillipsong.gittrending.inject.modules.MainActivityModule;
 import com.phillipsong.gittrending.ui.fragment.DeveloperFragment;
 import com.phillipsong.gittrending.ui.fragment.RepoFragment;
+import com.phillipsong.gittrending.ui.fragment.SettingsFragment;
 import com.phillipsong.gittrending.ui.widget.StringPicker;
 import com.phillipsong.gittrending.utils.Constants;
 import com.roughike.bottombar.BottomBar;
@@ -62,6 +63,7 @@ public class MainActivity extends BaseActivity {
     private BottomBar mBottomBar;
     private RepoFragment mRepoFragment;
     private DeveloperFragment mDevFragment;
+    private SettingsFragment mSettingsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,17 @@ public class MainActivity extends BaseActivity {
                             transaction.add(R.id.main_content, mDevFragment);
                         } else {
                             transaction.show(mDevFragment);
+                        }
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        hideFragment();
+                        if (mSettingsFragment == null) {
+                            mSettingsFragment = new SettingsFragment();
+                            transaction.add(R.id.main_content, mSettingsFragment);
+                        } else {
+                            transaction.show(mSettingsFragment);
                         }
                         break;
                     default:

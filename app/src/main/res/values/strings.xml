@@ -4,125 +4,15 @@
     <!-- repo -->
     <string name="repo_title">%1$s/</string>
     <string name="repo_item_built">Built by</string>
-    <string name="repo_item_share">Share</string>
-    <string name="repo_item_like">Like</string>
-    <string name="repo_item_liked">Liked</string>
 
-    <string name="title_activity_developer">Developers</string>
-    <string name="title_activity_repo">Repositories</string>
-
-
-
-    <string name="settings_title">Settings</string>
-    <string name="about_title">About</string>
-    <string name="languages_title">Languages</string>
-    <string name="menu_others">Others</string>
+    <!-- bottom tab title -->
+    <string name="title_fragment_repo">Repository</string>
+    <string name="title_fragment_developer">Developer</string>
+    <string name="title_fragment_search">Search</string>
+    <string name="title_fragment_settings">Settings</string>
 
     <string name="image_base_url">http://7xs2pw.com1.z0.glb.clouddn.com/%1$s.png</string>
 
-    <string name="version" formatted="false">Version %s (%s)</string>
-    <string name="fork_me_on_github">Fork me on GitHub</string>
-    <string name="about_trendings">About Trendings</string>
-    <string name="about_trendings_text"><![CDATA[
-        <p>Elegant client for Github Trend with Material Design. </p>
-        <p>This app is also open source in Github.</p>
-
-    ]]>
-    </string>
-
-    <string name="libraries_used">Libraries used</string>
-
-    <string name="about_copied">\"%s\" is copied to your clipboard</string>
-
-    <string name="about_page" translatable="false"><![CDATA[
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <meta charset="utf-8">
-            <style>
-            html {
-                background: #F4F4F4;
-                height: 100%;
-            }
-
-            body {
-                padding: 16px 0;
-            }
-
-            * {
-                margin: 0;
-                padding: 0;
-            }
-
-            h2 {
-                font-size: 12px;
-                padding: 16px;
-                color: #999;
-            }
-
-            ul {
-                list-style: none;
-            }
-
-            li a,
-            li a:visited,
-            .card {
-                display: block;
-                background: #FFFFFF;
-                box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.20);
-                padding: 16px;
-                color: #555;
-                font-size: 16px;
-                text-decoration: none;
-            }
-
-            li a:hover,
-            li a:active {
-                text-decoration: none;
-                background: #FEFEFE;
-            }
-
-            .card {
-                font-size: 14px;
-                line-height: 1.5;
-            }
-
-            .card p:not(:last-child) {
-                margin-bottom: 16px;
-            }
-
-            .card a {
-                color: #FF5252;
-            }
-            </style>
-        </head>
-        <body>
-            <h2>{{fork_me_on_github}}</h2>
-            <ul>
-                <li><a href="https://github.com/awind/Trendings">awind / Trendings</a></li>
-            </ul>
-            <h2>{{about_trendings}}</h2>
-            <div class="card">{{about_trendings_text}}</div>
-            <h2>{{libraries_used}}</h2>
-            <ul>
-                <li><a href="https://github.com/square/retrofit">square / retrofit</a></li>
-                <li><a href="https://github.com/ReactiveX/RxJava">ReactiveX / RxJava</a></li>
-                <li><a href="https://github.com/ReactiveX/RxAndroid">ReactiveX / RxAndroid</a></li>
-                <li><a href="https://github.com/trello/RxLifecycle">trello / RxLifecycle</a></li>
-                <li><a href="https://github.com/JakeWharton/RxBinding">JakeWharton / RxBinding</a></li>
-                <li><a href="https://github.com/bumptech/glide">bumptech / glide</a></li>
-                <li><a href="https://github.com/google/dagger">google / Dagger</a></li>
-            </ul>
-
-            <br />
-            <br />
-            <br />
-        </body>
-    </html>
-    ]]></string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_daily">daily</string>
     <string name="action_weekly">weekly</string>
     <string name="action_monthly">monthly</string>
@@ -133,5 +23,11 @@
     <string name="string_picker_dialog_title"></string>
     <string name="string_picker_dialog_ok">OK</string>
     <string name="string_picker_dialog_cancel">Cancel</string>
+    <string name="activity_settings_share_this_app">Share this App</string>
+    <string name="activity_settings_rate_this_app">Rate this App</string>
+    <string name="activity_settings_about_author">About author</string>
+
+    <string name="fragment_settings_share_app_content">This App is awesome!
+        Click https://play.google.com/store/apps/details?id=com.awind.trendings to download!</string>
 
 </resources>
