@@ -35,6 +35,7 @@ import com.phillipsong.gittrending.inject.components.DaggerMainActivityComponent
 import com.phillipsong.gittrending.inject.modules.MainActivityModule;
 import com.phillipsong.gittrending.ui.fragment.DeveloperFragment;
 import com.phillipsong.gittrending.ui.fragment.RepoFragment;
+import com.phillipsong.gittrending.ui.fragment.SearchFragment;
 import com.phillipsong.gittrending.ui.fragment.SettingsFragment;
 import com.phillipsong.gittrending.ui.widget.StringPicker;
 import com.phillipsong.gittrending.utils.Constants;
@@ -63,6 +64,7 @@ public class MainActivity extends BaseActivity {
     private BottomBar mBottomBar;
     private RepoFragment mRepoFragment;
     private DeveloperFragment mDevFragment;
+    private SearchFragment mSearchFragment;
     private SettingsFragment mSettingsFragment;
 
     @Override
@@ -116,6 +118,13 @@ public class MainActivity extends BaseActivity {
                         }
                         break;
                     case 2:
+                        hideFragment();
+                        if (mSearchFragment == null) {
+                            mSearchFragment = new SearchFragment();
+                            transaction.add(R.id.main_content, mSearchFragment);
+                        } else {
+                            transaction.show(mSearchFragment);
+                        }
                         break;
                     case 3:
                         hideFragment();

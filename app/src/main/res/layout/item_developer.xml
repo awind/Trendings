@@ -85,7 +85,7 @@
 
                 <TextView
                     android:id="@+id/dev_repo_name"
-                    android:layout_marginStart="8dp"
+                    android:layout_gravity="center_vertical"
                     android:textSize="12sp"
                     android:textColor="@color/text_color_gray"
                     android:layout_width="wrap_content"
@@ -93,6 +93,7 @@
 
                 <TextView
                     android:id="@+id/dev_repo_desc"
+                    android:layout_gravity="center_vertical"
                     android:textColor="@color/text_color_gray"
                     android:singleLine="true"
                     android:ellipsize="end"
