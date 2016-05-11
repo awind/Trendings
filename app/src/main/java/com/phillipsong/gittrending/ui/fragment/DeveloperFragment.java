@@ -16,6 +16,7 @@
 package com.phillipsong.gittrending.ui.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -47,6 +48,7 @@ import com.phillipsong.gittrending.ui.widget.StringPickerDialog;
 import com.phillipsong.gittrending.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -58,9 +60,6 @@ import rx.schedulers.Schedulers;
 
 public class DeveloperFragment extends BaseFragment implements OnItemClickListener, StringPickerDialog.OnClickListener {
     private static final String TAG = "RepoFragment";
-
-    private static final String LANGUAGE = "language";
-    private static final String SINCE = "since";
 
     private Toolbar mToolbar;
     private TextView mTitleTv;
@@ -75,6 +74,8 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
     TrendingApplication mContext;
     @Inject
     TrendingService mTrendingApi;
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     private String mLanguage;
     private String mSince;
@@ -91,21 +92,11 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
                     .putCustomAttribute("location", TAG)
                     .putCustomAttribute("message", throwable.getMessage()));
 
-    public static DeveloperFragment newInstance(String language, String since) {
-        DeveloperFragment fragment = new DeveloperFragment();
-
-        Bundle args = new Bundle();
-        args.putString(LANGUAGE, language);
-        args.putString(SINCE, since);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLanguage = getArguments().getString(LANGUAGE);
-        mSince = getArguments().getString(SINCE);
+        mLanguage = mSharedPreferences.getString(Constants.DEV_LANG_KEY, "All");
+        mSince = "Daily";
     }
 
     @Nullable
@@ -137,12 +128,20 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
             dialog.setListener(DeveloperFragment.this);
             Bundle bundle = new Bundle();
             bundle.putStringArray(getString(R.string.string_picker_dialog_values), Constants.LANGUAGE_LIST);
-            bundle.putInt(getString(R.string.string_picker_dialog_current_index), 2);
+            int index = Arrays.asList(Constants.LANGUAGE_LIST).indexOf(mLanguage);
+            bundle.putInt(getString(R.string.string_picker_dialog_current_index), index);
             dialog.setArguments(bundle);
             dialog.show(getChildFragmentManager(), TAG);
         });
         mSinceBtn.setOnClickListener(v -> {
-
+            StringPickerDialog dialog = new StringPickerDialog();
+            dialog.setListener(DeveloperFragment.this);
+            Bundle bundle = new Bundle();
+            bundle.putStringArray(getString(R.string.string_picker_dialog_values), Constants.LANGUAGE_LIST);
+            int index = Arrays.asList(Constants.LANGUAGE_LIST).indexOf(mLanguage);
+            bundle.putInt(getString(R.string.string_picker_dialog_current_index), index);
+            dialog.setArguments(bundle);
+            dialog.show(getChildFragmentManager(), TAG);
         });
 
         mSwipeRefreshLayout = (PSwipeRefreshLayout) view.findViewById(R.id.refresher);
@@ -160,7 +159,7 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
                 .compose(bindToLifecycle())
                 .observeOn(Schedulers.io())
-                .flatMap(aVoid -> mTrendingApi.getDevelopers(mLanguage, mSince))
+                .flatMap(aVoid -> mTrendingApi.getDevelopers(mLanguage.toLowerCase(), mSince.toLowerCase()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aVoid -> mSwipeRefreshLayout.setRefreshing(false))
                 .retry()
@@ -171,7 +170,7 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
     public void updateData(String language, String since) {
         mLanguage = language;
         mSince = since;
-        mTrendingApi.getDevelopers(mLanguage, mSince)
+        mTrendingApi.getDevelopers(mLanguage.toLowerCase(), mSince.toLowerCase())
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -201,6 +200,7 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
     public void onClick(String value) {
         mLanguage = value;
         mTitleTv.setText(mLanguage);
-        updateData(mLanguage.toLowerCase(), mSince.toLowerCase());
+        mSharedPreferences.edit().putString(Constants.DEV_LANG_KEY, mLanguage).apply();
+        updateData(mLanguage, mSince);
     }
 }

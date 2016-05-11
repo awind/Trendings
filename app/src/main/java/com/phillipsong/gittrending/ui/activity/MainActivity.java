@@ -35,6 +35,8 @@ import com.phillipsong.gittrending.inject.components.DaggerMainActivityComponent
 import com.phillipsong.gittrending.inject.modules.MainActivityModule;
 import com.phillipsong.gittrending.ui.fragment.DeveloperFragment;
 import com.phillipsong.gittrending.ui.fragment.RepoFragment;
+import com.phillipsong.gittrending.ui.widget.StringPicker;
+import com.phillipsong.gittrending.utils.Constants;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabClickListener;
@@ -60,9 +62,6 @@ public class MainActivity extends BaseActivity {
     private BottomBar mBottomBar;
     private RepoFragment mRepoFragment;
     private DeveloperFragment mDevFragment;
-
-    private String mLanguage = "All";
-    private String mSince = "Daily";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +98,7 @@ public class MainActivity extends BaseActivity {
                     case 0:
                         hideFragment();
                         if (mRepoFragment == null) {
-                            Log.d(TAG, "onTabSelected: repo null");
-                            mRepoFragment = RepoFragment.newInstance(mLanguage.toLowerCase(), mSince.toLowerCase());
+                            mRepoFragment = new RepoFragment();
                             transaction.add(R.id.main_content, mRepoFragment);
                         } else {
                             transaction.show(mRepoFragment);
@@ -109,11 +107,9 @@ public class MainActivity extends BaseActivity {
                     case 1:
                         hideFragment();
                         if (mDevFragment == null) {
-                            Log.d(TAG, "onTabSelected: dev null");
-                            mDevFragment = DeveloperFragment.newInstance(mLanguage.toLowerCase(), mSince.toLowerCase());
+                            mDevFragment = new DeveloperFragment();
                             transaction.add(R.id.main_content, mDevFragment);
                         } else {
-                            Log.d(TAG, "onTabSelected: dev not null");
                             transaction.show(mDevFragment);
                         }
                         break;

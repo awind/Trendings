@@ -16,6 +16,7 @@
 package com.phillipsong.gittrending.ui.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +49,7 @@ import com.phillipsong.gittrending.ui.widget.StringPickerDialog;
 import com.phillipsong.gittrending.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -59,9 +62,6 @@ import rx.schedulers.Schedulers;
 public class RepoFragment extends BaseFragment implements OnItemClickListener, StringPickerDialog.OnClickListener {
 
     private static final String TAG = "RepoFragment";
-
-    private static final String LANGUAGE = "language";
-    private static final String SINCE = "since";
 
     private Toolbar mToolbar;
     private TextView mTitleTv;
@@ -76,6 +76,8 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
     TrendingApplication mContext;
     @Inject
     TrendingService mTrendingApi;
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     private String mLanguage;
     private String mSince;
@@ -87,26 +89,19 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
         mRepoAdapter.notifyDataSetChanged();
     };
 
-    private Action1<Throwable> mThrowableAction = throwable ->
+    private Action1<Throwable> mThrowableAction = throwable -> {
+            Log.d(TAG, throwable.getLocalizedMessage());
             Answers.getInstance().logCustom(new CustomEvent("UpdateException")
             .putCustomAttribute("location", TAG)
             .putCustomAttribute("message", throwable.getMessage()));
+    };
 
-    public static RepoFragment newInstance(String language, String since) {
-        RepoFragment fragment = new RepoFragment();
-
-        Bundle args = new Bundle();
-        args.putString(LANGUAGE, language);
-        args.putString(SINCE, since);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLanguage = getArguments().getString(LANGUAGE);
-        mSince = getArguments().getString(SINCE);
+        mLanguage = mSharedPreferences.getString(Constants.REPO_LANG_KEY, "All");
+        mSince = "Daily";
     }
 
     @Nullable
@@ -138,7 +133,8 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
             dialog.setListener(RepoFragment.this);
             Bundle bundle = new Bundle();
             bundle.putStringArray(getString(R.string.string_picker_dialog_values), Constants.LANGUAGE_LIST);
-            bundle.putInt(getString(R.string.string_picker_dialog_current_index), 2);
+            int index = Arrays.asList(Constants.LANGUAGE_LIST).indexOf(mLanguage);
+            bundle.putInt(getString(R.string.string_picker_dialog_current_index), index);
             dialog.setArguments(bundle);
             dialog.show(getChildFragmentManager(), TAG);
         });
@@ -161,7 +157,7 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
                 .compose(bindToLifecycle())
                 .observeOn(Schedulers.io())
-                .flatMap(aVoid -> mTrendingApi.getTrending(mLanguage, mSince))
+                .flatMap(aVoid -> mTrendingApi.getTrending(mLanguage.toLowerCase(), mSince.toLowerCase()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aVoid -> mSwipeRefreshLayout.setRefreshing(false))
                 .retry()
@@ -172,7 +168,7 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
     public void updateData(String language, String since) {
         mLanguage = language;
         mSince = since;
-        mTrendingApi.getTrending(mLanguage, mSince)
+        mTrendingApi.getTrending(mLanguage.toLowerCase(), mSince.toLowerCase())
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -199,11 +195,16 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
                 .putContentType(TAG));
     }
 
+    /**
+     * StringPicker onClickEvent
+     * @param value
+     */
     @Override
     public void onClick(String value) {
         mLanguage = value;
         mTitleTv.setText(mLanguage);
-        updateData(mLanguage.toLowerCase(), mSince.toLowerCase());
+        mSharedPreferences.edit().putString(Constants.REPO_LANG_KEY, mLanguage).apply();
+        updateData(mLanguage, mSince);
     }
 
 }
