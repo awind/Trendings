@@ -2,6 +2,7 @@ package com.phillipsong.gittrending.ui.widget;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -22,10 +23,6 @@ public class StringPickerDialog extends DialogFragment {
 
     @Override
     public void onAttach(Activity activity) {
-        if (!(activity instanceof OnClickListener)) {
-            throw new RuntimeException("callback is must implements StringPickerDialog.OnClickListener!");
-        }
-        mListener = (OnClickListener) activity;
         mActivity = activity;
         super.onAttach(activity);
     }
@@ -61,6 +58,12 @@ public class StringPickerDialog extends DialogFragment {
         return builder.create();
     }
 
+    public void setListener(OnClickListener listener) {
+        if (listener == null) {
+            throw new RuntimeException("OnClickListener is null!");
+        }
+        this.mListener = listener;
+    }
     private String getValue(final int resId) {
         return mActivity.getString(resId);
     }

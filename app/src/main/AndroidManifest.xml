@@ -21,7 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.LanguagesActivity"/>
         <activity android:name=".ui.activity.AboutActivity"/>
 
         <meta-data

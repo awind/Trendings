@@ -22,9 +22,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
@@ -40,6 +43,7 @@ import com.phillipsong.gittrending.inject.modules.RepoFragmentModule;
 import com.phillipsong.gittrending.ui.adapter.RepoAdapter;
 import com.phillipsong.gittrending.ui.misc.OnItemClickListener;
 import com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout;
+import com.phillipsong.gittrending.ui.widget.StringPickerDialog;
 import com.phillipsong.gittrending.utils.Constants;
 
 import java.util.ArrayList;
@@ -52,13 +56,17 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class RepoFragment extends BaseFragment implements OnItemClickListener {
+public class RepoFragment extends BaseFragment implements OnItemClickListener, StringPickerDialog.OnClickListener {
 
     private static final String TAG = "RepoFragment";
 
     private static final String LANGUAGE = "language";
     private static final String SINCE = "since";
 
+    private Toolbar mToolbar;
+    private TextView mTitleTv;
+    private ImageButton mLangBtn;
+    private ImageButton mSinceBtn;
     private PSwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private RepoAdapter mRepoAdapter;
@@ -119,6 +127,25 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener {
     }
 
     private void initViews(View view) {
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        mTitleTv = (TextView) view.findViewById(R.id.title);
+        mTitleTv.setText(mLanguage);
+
+        mLangBtn = (ImageButton) view.findViewById(R.id.language_btn);
+        mSinceBtn = (ImageButton) view.findViewById(R.id.since_btn);
+        mLangBtn.setOnClickListener(v -> {
+            StringPickerDialog dialog = new StringPickerDialog();
+            dialog.setListener(RepoFragment.this);
+            Bundle bundle = new Bundle();
+            bundle.putStringArray(getString(R.string.string_picker_dialog_values), Constants.LANGUAGE_LIST);
+            bundle.putInt(getString(R.string.string_picker_dialog_current_index), 2);
+            dialog.setArguments(bundle);
+            dialog.show(getChildFragmentManager(), TAG);
+        });
+        mSinceBtn.setOnClickListener(v -> {
+
+        });
+
         mSwipeRefreshLayout = (PSwipeRefreshLayout) view.findViewById(R.id.refresher);
         mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLUE, Color.CYAN);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -170,6 +197,13 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener {
         Answers.getInstance().logContentView(new ContentViewEvent()
                 .putContentName(repo.getUrl())
                 .putContentType(TAG));
+    }
+
+    @Override
+    public void onClick(String value) {
+        mLanguage = value;
+        mTitleTv.setText(mLanguage);
+        updateData(mLanguage.toLowerCase(), mSince.toLowerCase());
     }
 
 }

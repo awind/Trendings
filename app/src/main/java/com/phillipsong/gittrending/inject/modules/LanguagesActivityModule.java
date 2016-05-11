@@ -15,8 +15,6 @@
  */
 package com.phillipsong.gittrending.inject.modules;
 
-import com.phillipsong.gittrending.ui.activity.LanguagesActivity;
-
 import dagger.Module;
 import dagger.Provides;
 

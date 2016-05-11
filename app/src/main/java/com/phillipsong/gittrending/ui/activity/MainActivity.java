@@ -18,6 +18,7 @@ package com.phillipsong.gittrending.ui.activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -34,16 +35,16 @@ import com.phillipsong.gittrending.inject.components.DaggerMainActivityComponent
 import com.phillipsong.gittrending.inject.modules.MainActivityModule;
 import com.phillipsong.gittrending.ui.fragment.DeveloperFragment;
 import com.phillipsong.gittrending.ui.fragment.RepoFragment;
-import com.phillipsong.gittrending.ui.widget.StringPickerDialog;
-import com.phillipsong.gittrending.utils.Constants;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabClickListener;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 
-public class MainActivity extends BaseActivity implements StringPickerDialog.OnClickListener {
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
 
@@ -56,10 +57,6 @@ public class MainActivity extends BaseActivity implements StringPickerDialog.OnC
     @Inject
     SharedPreferences mSharedPreferences;
 
-    private Toolbar mToolbar;
-    private TextView mTitleTv;
-    private ImageButton mLangBtn;
-    private ImageButton mSinceBtn;
     private BottomBar mBottomBar;
     private RepoFragment mRepoFragment;
     private DeveloperFragment mDevFragment;
@@ -70,7 +67,6 @@ public class MainActivity extends BaseActivity implements StringPickerDialog.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setContentView(R.layout.activity_main);
         mBottomBar = BottomBar.attachShy((CoordinatorLayout) findViewById(R.id.myCoordinator),
                 null, savedInstanceState);
@@ -101,16 +97,25 @@ public class MainActivity extends BaseActivity implements StringPickerDialog.OnC
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 switch (position) {
                     case 0:
+                        hideFragment();
                         if (mRepoFragment == null) {
+                            Log.d(TAG, "onTabSelected: repo null");
                             mRepoFragment = RepoFragment.newInstance(mLanguage.toLowerCase(), mSince.toLowerCase());
+                            transaction.add(R.id.main_content, mRepoFragment);
+                        } else {
+                            transaction.show(mRepoFragment);
                         }
-                        transaction.replace(R.id.main_content, mRepoFragment);
                         break;
                     case 1:
+                        hideFragment();
                         if (mDevFragment == null) {
+                            Log.d(TAG, "onTabSelected: dev null");
                             mDevFragment = DeveloperFragment.newInstance(mLanguage.toLowerCase(), mSince.toLowerCase());
+                            transaction.add(R.id.main_content, mDevFragment);
+                        } else {
+                            Log.d(TAG, "onTabSelected: dev not null");
+                            transaction.show(mDevFragment);
                         }
-                        transaction.replace(R.id.main_content, mDevFragment);
                         break;
                     default:
                         break;
@@ -123,32 +128,18 @@ public class MainActivity extends BaseActivity implements StringPickerDialog.OnC
 
             }
         });
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mTitleTv = (TextView) findViewById(R.id.title);
-        mTitleTv.setText(mLanguage);
-        setSupportActionBar(mToolbar);
-
-        mLangBtn = (ImageButton) findViewById(R.id.language_btn);
-        mSinceBtn = (ImageButton) findViewById(R.id.since_btn);
-        mLangBtn.setOnClickListener(v -> {
-            StringPickerDialog dialog = new StringPickerDialog();
-            Bundle bundle = new Bundle();
-            bundle.putStringArray(getString(R.string.string_picker_dialog_values), Constants.LANGUAGE_LIST);
-            bundle.putInt(getString(R.string.string_picker_dialog_current_index), 2);
-            dialog.setArguments(bundle);
-            dialog.show(getSupportFragmentManager(), TAG);
-        });
-        mSinceBtn.setOnClickListener(v -> {
-
-        });
     }
 
-    @Override
-    public void onClick(String value) {
-        mLanguage = value;
-        mTitleTv.setText(mLanguage);
-        mRepoFragment.updateData(mLanguage.toLowerCase(), mSince.toLowerCase());
+    private void hideFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments == null) {
+            return;
+        }
+        for (Fragment fragment : fragments) {
+            transaction.hide(fragment);
+        }
+        transaction.commit();
     }
 
     @Override

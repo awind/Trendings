@@ -8,22 +8,9 @@
 
     <FrameLayout
         android:id="@+id/main_content"
-        android:layout_marginTop="81dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </FrameLayout>
-
-    <android.support.design.widget.AppBarLayout
-        android:fitsSystemWindows="false"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="25dp">
-
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/layout_toolbar" />
-
-    </android.support.design.widget.AppBarLayout>
 
 </android.support.design.widget.CoordinatorLayout>

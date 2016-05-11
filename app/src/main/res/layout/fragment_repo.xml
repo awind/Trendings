@@ -6,6 +6,7 @@
 
     <com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout
         android:id="@+id/refresher"
+        android:layout_marginTop="81dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -13,11 +14,25 @@
             android:id="@+id/recycler_view"
             android:paddingBottom="36dp"
             android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layoutManager="LinearLayoutManager"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </android.support.v7.widget.RecyclerView>
 
     </com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout>
+
+    <android.support.design.widget.AppBarLayout
+        android:fitsSystemWindows="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:paddingTop="25dp">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/layout_toolbar" />
+
+    </android.support.design.widget.AppBarLayout>
 
 </FrameLayout>

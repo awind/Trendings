@@ -22,9 +22,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
@@ -40,6 +43,7 @@ import com.phillipsong.gittrending.inject.modules.DeveloperFragmentModule;
 import com.phillipsong.gittrending.ui.adapter.DeveloperAdapter;
 import com.phillipsong.gittrending.ui.misc.OnItemClickListener;
 import com.phillipsong.gittrending.ui.widget.PSwipeRefreshLayout;
+import com.phillipsong.gittrending.ui.widget.StringPickerDialog;
 import com.phillipsong.gittrending.utils.Constants;
 
 import java.util.ArrayList;
@@ -52,12 +56,16 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class DeveloperFragment extends BaseFragment implements OnItemClickListener {
+public class DeveloperFragment extends BaseFragment implements OnItemClickListener, StringPickerDialog.OnClickListener {
     private static final String TAG = "RepoFragment";
 
     private static final String LANGUAGE = "language";
     private static final String SINCE = "since";
 
+    private Toolbar mToolbar;
+    private TextView mTitleTv;
+    private ImageButton mLangBtn;
+    private ImageButton mSinceBtn;
     private PSwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private DeveloperAdapter mAdapter;
@@ -118,6 +126,25 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
     }
 
     private void initViews(View view) {
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        mTitleTv = (TextView) view.findViewById(R.id.title);
+        mTitleTv.setText(mLanguage);
+
+        mLangBtn = (ImageButton) view.findViewById(R.id.language_btn);
+        mSinceBtn = (ImageButton) view.findViewById(R.id.since_btn);
+        mLangBtn.setOnClickListener(v -> {
+            StringPickerDialog dialog = new StringPickerDialog();
+            dialog.setListener(DeveloperFragment.this);
+            Bundle bundle = new Bundle();
+            bundle.putStringArray(getString(R.string.string_picker_dialog_values), Constants.LANGUAGE_LIST);
+            bundle.putInt(getString(R.string.string_picker_dialog_current_index), 2);
+            dialog.setArguments(bundle);
+            dialog.show(getChildFragmentManager(), TAG);
+        });
+        mSinceBtn.setOnClickListener(v -> {
+
+        });
+
         mSwipeRefreshLayout = (PSwipeRefreshLayout) view.findViewById(R.id.refresher);
         mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLUE, Color.CYAN);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -128,7 +155,7 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
         mAdapter = new DeveloperAdapter(mContext, mUserList, this);
         mRecyclerView.setAdapter(mAdapter);
 
-        updateData(mSince);
+        updateData(mLanguage, mSince);
 
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
                 .compose(bindToLifecycle())
@@ -141,7 +168,8 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
                 .subscribe(mUpdateAction, mThrowableAction);
     }
 
-    public void updateData(String since) {
+    public void updateData(String language, String since) {
+        mLanguage = language;
         mSince = since;
         mTrendingApi.getDevelopers(mLanguage, mSince)
                 .compose(bindToLifecycle())
@@ -167,5 +195,12 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
         Answers.getInstance().logContentView(new ContentViewEvent()
                 .putContentName(user.getUrl())
                 .putContentType(TAG));
+    }
+
+    @Override
+    public void onClick(String value) {
+        mLanguage = value;
+        mTitleTv.setText(mLanguage);
+        updateData(mLanguage.toLowerCase(), mSince.toLowerCase());
     }
 }
