@@ -30,7 +30,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApiModule {
 
-    private TrendingService mApi;
+    private TrendingService mTrendingApi;
+    private GithubService mGithubApi;
 
 
     public ApiModule() {
@@ -45,16 +46,30 @@ public class ApiModule {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl(Constants.BASE_URL)
+                .baseUrl(Constants.TRENDING_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
+        mTrendingApi = retrofit.create(TrendingService.class);
 
-        mApi = retrofit.create(TrendingService.class);
+        Retrofit githubRetrofit =  new Retrofit.Builder()
+                .client(client)
+                .baseUrl(Constants.GITHUB_API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        mGithubApi = githubRetrofit.create(GithubService.class);
+
     }
 
     @Provides
     public TrendingService provideTrendingService() {
-        return mApi;
+        return mTrendingApi;
     }
+
+    @Provides
+    public GithubService provideGithubService() {
+        return mGithubApi;
+    }
+
 }

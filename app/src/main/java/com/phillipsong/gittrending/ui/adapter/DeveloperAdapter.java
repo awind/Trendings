@@ -16,7 +16,11 @@
 package com.phillipsong.gittrending.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +39,6 @@ public class DeveloperAdapter extends RecyclerView.Adapter<DeveloperAdapter.Deve
     public static class DeveloperViewHolder extends RecyclerView.ViewHolder {
         private TextView mRank;
         private ImageView mAvatar;
-        private TextView mName;
         private TextView mFullName;
         private TextView mRepoName;
         private TextView mRepoDesc;
@@ -45,7 +48,6 @@ public class DeveloperAdapter extends RecyclerView.Adapter<DeveloperAdapter.Deve
 
             mRank = (TextView) view.findViewById(R.id.dev_rank);
             mAvatar = (ImageView) view.findViewById(R.id.dev_avatar);
-            mName = (TextView) view.findViewById(R.id.dev_name);
             mFullName = (TextView) view.findViewById(R.id.dev_fullname);
             mRepoName = (TextView) view.findViewById(R.id.dev_repo_name);
             mRepoDesc = (TextView) view.findViewById(R.id.dev_repo_desc);
@@ -58,8 +60,14 @@ public class DeveloperAdapter extends RecyclerView.Adapter<DeveloperAdapter.Deve
                     .load(user.getAvatar())
                     .fitCenter()
                     .into(mAvatar);
-            mName.setText(user.getLoginName());
-            mFullName.setText(user.getFullName());
+
+            Spannable wordtoSpan = new SpannableString(user.getLoginName() + user.getFullName());
+
+
+            wordtoSpan.setSpan(new ForegroundColorSpan(
+                    context.getResources().getColor(R.color.text_color_blue)), 0,
+                    user.getLoginName().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mFullName.setText(wordtoSpan);
             mRepoName.setText(user.getRepoName());
             mRepoDesc.setText(user.getRepoDesc());
 

@@ -17,7 +17,8 @@ package com.phillipsong.gittrending.utils;
 
 public class Constants {
 
-    public static final String BASE_URL = "http://162.243.45.82";
+    public static final String TRENDING_BASE_URL = "http://162.243.45.82";
+    public static final String GITHUB_API_BASE_URL = "https://api.github.com/search/";
 
     public static final String GITHUB_BASE_URL = "https://github.com";
     public static final String GITHUB_PROFILE_URL = "https://github.com/awind";

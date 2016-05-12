@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 
 import com.phillipsong.gittrending.TrendingApplication;
 import com.phillipsong.gittrending.data.api.ApiModule;
+import com.phillipsong.gittrending.data.api.GithubService;
 import com.phillipsong.gittrending.data.api.TrendingService;
 import com.phillipsong.gittrending.inject.modules.AppModule;
 
@@ -34,6 +35,8 @@ public interface AppComponent {
     TrendingApplication getApplication();
 
     TrendingService getTrendingService();
+
+    GithubService getGithubService();
 
     SharedPreferences getSharedPreferences();
 }

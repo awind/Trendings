@@ -63,6 +63,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoViewHolder
                     repo.getLanguage().toLowerCase());
             Glide.with(context)
                     .load(languagePic)
+                    .placeholder(R.mipmap.ic_lang)
                     .error(R.mipmap.ic_lang)
                     .fitCenter()
                     .into(mLanguage);

@@ -17,17 +17,30 @@ package com.phillipsong.gittrending.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.phillipsong.gittrending.R;
-import com.phillipsong.gittrending.inject.components.AppComponent;
+import com.phillipsong.gittrending.ui.adapter.SectionsPagerAdapter;
 
-public class SearchFragment extends BaseFragment {
+public class SearchFragment extends Fragment implements SearchView.OnQueryTextListener {
+
+    private static final String TAG = "SearchFragment";
 
     private Toolbar mToolbar;
+    private SearchView mSearchView;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    private RepoSearchFragment mRepoSearchFragment;
+    private DevSearchFragment mDevSearchFragment;
 
     @Nullable
     @Override
@@ -39,11 +52,33 @@ public class SearchFragment extends BaseFragment {
 
     private void initViews(View view) {
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mToolbar.setTitle(R.string.title_fragment_search);
+        mSearchView = (SearchView) view.findViewById(R.id.search);
+        mSearchView.onActionViewExpanded();
+        mSearchView.setSubmitButtonEnabled(true);
+        mSearchView.setOnQueryTextListener(this);
+
+        mTabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        mViewPager = (ViewPager) view.findViewById(R.id.container);
+
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+        mRepoSearchFragment = new RepoSearchFragment();
+        mDevSearchFragment = new DevSearchFragment();
+        mSectionsPagerAdapter.addFragment(mRepoSearchFragment,
+                "Repo");
+        mSectionsPagerAdapter.addFragment(mDevSearchFragment,
+                "Developer");
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
-    protected void setupFragmentComponent(AppComponent appComponent) {
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+
+        return true;
     }
 }
