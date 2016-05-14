@@ -26,4 +26,6 @@ public class Constants {
     public static final String REPO_LANG_KEY = "repoLanguage";
     public static final String DEV_LANG_KEY = "devLanguage";
 
+    public static final int PER_ITEMS_COUNT = 25;
+
 }

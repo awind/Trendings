@@ -15,8 +15,10 @@ import rx.Observable;
 public interface GithubService {
 
     @GET("users")
-    Observable<GithubResponse<GithubUser>> searchUser(@Query("q") String keyword);
+    Observable<GithubResponse<GithubUser>> searchUser(@Query("q") String keyword,
+                                                      @Query("page") int page);
 
     @GET("repositories")
-    Observable<GithubResponse<GithubRepo>> searchRepo(@Query("q") String keyword);
+    Observable<GithubResponse<GithubRepo>> searchRepo(@Query("q") String keyword,
+                                                      @Query("page") int page);
 }

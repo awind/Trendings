@@ -13,26 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.inject.modules;
+package com.phillipsong.gittrending.ui.misc;
 
-import com.phillipsong.gittrending.ui.fragment.RepoSearchFragment;
-import com.phillipsong.gittrending.ui.misc.PerFragment;
-
-import dagger.Module;
-import dagger.Provides;
-
-@Module
-public class RepoSearchFragmentModule {
-
-    RepoSearchFragment mRepoSearchFragment;
-
-    public RepoSearchFragmentModule(RepoSearchFragment fragment) {
-        this.mRepoSearchFragment = fragment;
-    }
-
-    @Provides
-    @PerFragment
-    RepoSearchFragment provideRepoSearchFragment() {
-        return mRepoSearchFragment;
-    }
+public interface OnBottomListener {
+    void onBottom();
 }

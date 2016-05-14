@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/repo_icon_and_title"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/repo_icon"
+            android:background="@mipmap/ic_lang"
+            android:layout_marginStart="16dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp" />
+
+        <TextView
+            android:id="@+id/repo_title"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
+            android:textSize="17sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/text_color_blue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/repo_desc"
+        android:layout_below="@+id/repo_icon_and_title"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/text_color_gray"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/repo_lang"
+        android:layout_below="@+id/repo_desc"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="14sp"
+        android:textColor="@color/text_color_gray"
+        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/repo_stars"
+        android:layout_below="@+id/repo_desc"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:drawableStart="@mipmap/ic_star"
+        android:drawablePadding="4dp"
+        android:textSize="14sp"
+        android:textColor="@color/text_color_gray"
+        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_main"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+</RelativeLayout>

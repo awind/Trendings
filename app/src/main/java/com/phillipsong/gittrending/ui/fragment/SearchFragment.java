@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,8 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     private RepoSearchFragment mRepoSearchFragment;
     private DevSearchFragment mDevSearchFragment;
 
+    private int mCurrentTabPosition = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,8 +57,8 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mSearchView = (SearchView) view.findViewById(R.id.search);
         mSearchView.onActionViewExpanded();
-        mSearchView.setSubmitButtonEnabled(true);
         mSearchView.setOnQueryTextListener(this);
+        mSearchView.setQueryHint(getContext().getString(R.string.fragment_search_repos_hint));
 
         mTabLayout = (TabLayout) view.findViewById(R.id.tabs);
         mViewPager = (ViewPager) view.findViewById(R.id.container);
@@ -69,6 +72,28 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
                 "Developer");
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mCurrentTabPosition = position;
+                if (position == 0) {
+                    mSearchView.setQueryHint(getContext().getString(R.string.fragment_search_repos_hint));
+                } else {
+                    mSearchView.setQueryHint(getContext().getString(R.string.fragment_search_users_hint));
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -78,7 +103,16 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-
+        switch (mCurrentTabPosition) {
+            case 0:
+                mRepoSearchFragment.search(query);
+                break;
+            case 1:
+                mDevSearchFragment.search(query);
+                break;
+            default:
+                break;
+        }
         return true;
     }
 }

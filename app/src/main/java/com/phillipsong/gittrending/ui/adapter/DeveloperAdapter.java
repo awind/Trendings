@@ -36,6 +36,36 @@ import java.util.List;
 
 public class DeveloperAdapter extends RecyclerView.Adapter<DeveloperAdapter.DeveloperViewHolder> {
 
+    private Context mContext;
+    private List<User> mUserList;
+    private OnItemClickListener mListener;
+
+    public DeveloperAdapter(Context context, List<User> list, OnItemClickListener listener) {
+        mContext = context;
+        mUserList = list;
+        mListener = listener;
+    }
+
+    @Override
+    public DeveloperViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_developer,
+                parent, false);
+        DeveloperViewHolder viewHolder = new DeveloperViewHolder(view);
+        view.setTag(viewHolder);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(DeveloperViewHolder holder, int position) {
+        User user = mUserList.get(position);
+        holder.bindItem(mContext, user, position, mListener);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mUserList == null ? 0 : mUserList.size();
+    }
+
     public static class DeveloperViewHolder extends RecyclerView.ViewHolder {
         private TextView mRank;
         private ImageView mAvatar;
@@ -65,7 +95,7 @@ public class DeveloperAdapter extends RecyclerView.Adapter<DeveloperAdapter.Deve
 
 
             wordtoSpan.setSpan(new ForegroundColorSpan(
-                    context.getResources().getColor(R.color.text_color_blue)), 0,
+                            context.getResources().getColor(R.color.text_color_blue)), 0,
                     user.getLoginName().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mFullName.setText(wordtoSpan);
             mRepoName.setText(user.getRepoName());
@@ -77,35 +107,5 @@ public class DeveloperAdapter extends RecyclerView.Adapter<DeveloperAdapter.Deve
                 }
             });
         }
-    }
-
-    private Context mContext;
-    private List<User> mUserList;
-    private OnItemClickListener mListener;
-
-    public DeveloperAdapter(Context context, List<User> list, OnItemClickListener listener) {
-        mContext = context;
-        mUserList = list;
-        mListener = listener;
-    }
-
-    @Override
-    public DeveloperViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_developer,
-                parent, false);
-        DeveloperViewHolder viewHolder = new DeveloperViewHolder(view);
-        view.setTag(viewHolder);
-        return viewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(DeveloperViewHolder holder, int position) {
-        User user = mUserList.get(position);
-        holder.bindItem(mContext, user, position, mListener);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mUserList == null ? 0 : mUserList.size();
     }
 }

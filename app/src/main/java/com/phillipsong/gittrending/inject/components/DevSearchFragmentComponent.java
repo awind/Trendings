@@ -13,26 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phillipsong.gittrending.inject.modules;
+package com.phillipsong.gittrending.inject.components;
 
-import com.phillipsong.gittrending.ui.fragment.RepoSearchFragment;
+import com.phillipsong.gittrending.inject.modules.DevSearchFragmentModule;
+import com.phillipsong.gittrending.ui.fragment.DevSearchFragment;
 import com.phillipsong.gittrending.ui.misc.PerFragment;
 
-import dagger.Module;
-import dagger.Provides;
+import dagger.Component;
 
-@Module
-public class RepoSearchFragmentModule {
+@PerFragment
+@Component(modules = {DevSearchFragmentModule.class}, dependencies = {AppComponent.class})
+public interface DevSearchFragmentComponent extends MainActivityComponent {
 
-    RepoSearchFragment mRepoSearchFragment;
-
-    public RepoSearchFragmentModule(RepoSearchFragment fragment) {
-        this.mRepoSearchFragment = fragment;
-    }
-
-    @Provides
-    @PerFragment
-    RepoSearchFragment provideRepoSearchFragment() {
-        return mRepoSearchFragment;
-    }
+    void inject(DevSearchFragment fragment);
 }

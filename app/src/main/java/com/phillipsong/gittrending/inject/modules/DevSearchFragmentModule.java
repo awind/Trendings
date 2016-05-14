@@ -15,24 +15,26 @@
  */
 package com.phillipsong.gittrending.inject.modules;
 
-import com.phillipsong.gittrending.ui.fragment.RepoSearchFragment;
+import com.phillipsong.gittrending.ui.fragment.DevSearchFragment;
 import com.phillipsong.gittrending.ui.misc.PerFragment;
 
 import dagger.Module;
 import dagger.Provides;
 
+
 @Module
-public class RepoSearchFragmentModule {
+public class DevSearchFragmentModule {
 
-    RepoSearchFragment mRepoSearchFragment;
+    DevSearchFragment mDevSearchFragment;
 
-    public RepoSearchFragmentModule(RepoSearchFragment fragment) {
-        this.mRepoSearchFragment = fragment;
+    public DevSearchFragmentModule(DevSearchFragment fragment) {
+        this.mDevSearchFragment = fragment;
     }
 
     @Provides
     @PerFragment
-    RepoSearchFragment provideRepoSearchFragment() {
-        return mRepoSearchFragment;
+    DevSearchFragment provideDevSearchFragment() {
+        return mDevSearchFragment;
     }
+
 }

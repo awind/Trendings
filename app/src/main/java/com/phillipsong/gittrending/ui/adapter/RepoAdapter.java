@@ -19,6 +19,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,38 @@ import com.phillipsong.gittrending.ui.widget.AvatarContainer;
 import java.util.List;
 
 public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoViewHolder> {
+
+    private Context mContext;
+    private List<Repo> mRepos;
+    private OnItemClickListener mListener;
+
+    public RepoAdapter(Context context, List<Repo> list, OnItemClickListener listener) {
+        this.mContext = context;
+        this.mRepos = list;
+        this.mListener = listener;
+    }
+
+    @Override
+    public RepoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_repo,
+                parent, false);
+        RepoViewHolder viewHolder = new RepoViewHolder(view);
+        view.setTag(viewHolder);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(RepoViewHolder holder, int position) {
+        Repo repo = mRepos.get(position);
+        holder.bind(mContext, repo);
+        holder.itemView.setOnClickListener(v -> mListener.onItemClick(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return mRepos == null ? 0 : mRepos.size();
+    }
+
 
     public static class RepoViewHolder extends RecyclerView.ViewHolder {
         private TextView mTitle;
@@ -67,40 +100,14 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.RepoViewHolder
                     .error(R.mipmap.ic_lang)
                     .fitCenter()
                     .into(mLanguage);
-            mDescription.setText(repo.getDescription());
+            if (TextUtils.isEmpty(repo.getDescription())) {
+                mDescription.setVisibility(View.GONE);
+            } else {
+                mDescription.setText(repo.getDescription());
+            }
             mAvatar.setImageUrls(repo.getContributors());
             mStar.setText(repo.getStar());
         }
     }
 
-    private Context mContext;
-    private List<Repo> mRepos;
-    private OnItemClickListener mListener;
-
-    public RepoAdapter(Context context, List<Repo> list, OnItemClickListener listener) {
-        this.mContext = context;
-        this.mRepos = list;
-        this.mListener = listener;
-    }
-
-    @Override
-    public RepoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_repo,
-                parent, false);
-        RepoViewHolder viewHolder = new RepoViewHolder(view);
-        view.setTag(viewHolder);
-        return viewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(RepoViewHolder holder, int position) {
-        Repo repo = mRepos.get(position);
-        holder.bind(mContext, repo);
-        holder.itemView.setOnClickListener(v -> mListener.onItemClick(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mRepos == null ? 0 : mRepos.size();
-    }
 }

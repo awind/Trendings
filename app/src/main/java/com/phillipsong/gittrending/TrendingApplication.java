@@ -23,6 +23,7 @@ import com.crashlytics.android.Crashlytics;
 import com.phillipsong.gittrending.inject.components.AppComponent;
 import com.phillipsong.gittrending.inject.components.DaggerAppComponent;
 import com.phillipsong.gittrending.inject.modules.AppModule;
+import com.squareup.leakcanary.LeakCanary;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -42,6 +43,8 @@ public class TrendingApplication extends Application {
                 .debuggable(false)
                 .build();
         Fabric.with(fabric);
+
+        LeakCanary.install(this);
 
         // Dagger
         mAppComponent = DaggerAppComponent.builder()

@@ -15,6 +15,9 @@
  */
 package com.phillipsong.gittrending.data.api;
 
+import android.os.Build;
+
+import com.phillipsong.gittrending.BuildConfig;
 import com.phillipsong.gittrending.utils.Constants;
 
 import java.util.concurrent.TimeUnit;
@@ -37,7 +40,11 @@ public class ApiModule {
     public ApiModule() {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        if (BuildConfig.DEBUG) {
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        } else {
+            interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+        }
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .retryOnConnectionFailure(true)
