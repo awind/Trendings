@@ -15,16 +15,21 @@
  */
 package com.phillipsong.gittrending.ui.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -58,7 +63,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class RepoFragment extends BaseFragment implements OnItemClickListener, StringPickerDialog.OnClickListener {
+public class RepoFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener {
 
     private static final String TAG = "RepoFragment";
 
@@ -99,6 +104,7 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         mLanguage = mSharedPreferences.getString(Constants.REPO_LANG_KEY, "All");
         mSince = "Daily";
     }
@@ -127,20 +133,8 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
 
         mLangBtn = (ImageButton) view.findViewById(R.id.language_btn);
         mSinceBtn = (ImageButton) view.findViewById(R.id.since_btn);
-        mLangBtn.setOnClickListener(v -> {
-            StringPickerDialog dialog = new StringPickerDialog();
-            dialog.setListener(RepoFragment.this);
-            Bundle bundle = new Bundle();
-            String[] languages = getResources().getStringArray(R.array.support_languages);
-            bundle.putStringArray(getString(R.string.string_picker_dialog_values), languages);
-            int index = Arrays.asList(languages).indexOf(mLanguage);
-            bundle.putInt(getString(R.string.string_picker_dialog_current_index), index);
-            dialog.setArguments(bundle);
-            dialog.show(getChildFragmentManager(), TAG);
-        });
-        mSinceBtn.setOnClickListener(v -> {
-
-        });
+        mLangBtn.setOnClickListener(this);
+        mSinceBtn.setOnClickListener(this);
 
         mSwipeRefreshLayout = (PSwipeRefreshLayout) view.findViewById(R.id.refresher);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -194,16 +188,78 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, S
                 .putContentType(TAG));
     }
 
-    /**
-     * StringPicker onClickEvent
-     * @param value
-     */
     @Override
-    public void onClick(String value) {
-        mLanguage = value;
-        mTitleTv.setText(mLanguage);
-        mSharedPreferences.edit().putString(Constants.REPO_LANG_KEY, mLanguage).apply();
-        updateData(mLanguage, mSince);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        Log.d("click" , "inside the on create");
+
+        inflater.inflate(R.menu.menu_main, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_daily:
+                Log.d(TAG, "onOptionsItemSelected: 1");
+                break;
+            case R.id.action_weekly:
+                Log.d(TAG, "onOptionsItemSelected: 2");
+                break;
+            case R.id.action_monthly:
+                Log.d(TAG, "onOptionsItemSelected: 3");
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.language_btn:
+                chooseLanguage();
+                break;
+            case R.id.since_btn:
+                showSinceDialog();
+                break;
+        }
+    }
+
+    private void chooseLanguage() {
+        StringPickerDialog dialog = new StringPickerDialog();
+        dialog.setListener(value -> {
+            if (!value.equals(mLanguage)) {
+                mLanguage = value;
+                mTitleTv.setText(mLanguage);
+                mSharedPreferences.edit().putString(Constants.REPO_LANG_KEY, mLanguage).apply();
+                updateData(mLanguage, mSince);
+            }
+        });
+        Bundle bundle = new Bundle();
+        String[] languages = getResources().getStringArray(R.array.support_languages);
+        bundle.putStringArray(getString(R.string.string_picker_dialog_values), languages);
+        int index = Arrays.asList(languages).indexOf(mLanguage);
+        bundle.putInt(getString(R.string.string_picker_dialog_current_index), index);
+        dialog.setArguments(bundle);
+        dialog.show(getChildFragmentManager(), TAG);
+    }
+
+    private void showSinceDialog() {
+        final String[] sinceArray = getResources().getStringArray(R.array.lang_since_array);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(),
+                R.style.AppCompatAlertDialogStyle);
+        dialogBuilder.setTitle(mContext.getString(R.string.fragment_repo_choose_since));
+        dialogBuilder.setItems(sinceArray, ((dialog, which) -> {
+            String since = sinceArray[which];
+            if (!since.equals(mSince)) {
+                mSince = since;
+                updateData(mLanguage, mSince);
+            }
+        }));
+        AlertDialog alertDialogObject = dialogBuilder.create();
+        alertDialogObject.show();
+    }
 }

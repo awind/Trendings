@@ -45,14 +45,11 @@ public class StringPickerDialog extends DialogFragment {
             stringPicker.setCurrent(index);
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity,
+                R.style.AppCompatAlertDialogStyle);
         builder.setTitle(getValue(R.string.string_picker_dialog_title));
-        builder.setPositiveButton(getValue(R.string.string_picker_dialog_ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mListener.onClick(stringPicker.getCurrentValue());
-            }
-        });
+        builder.setPositiveButton(getValue(R.string.string_picker_dialog_ok),
+                ((dialog, which) -> mListener.onClick(stringPicker.getCurrentValue())));
         builder.setNegativeButton(getValue(R.string.string_picker_dialog_cancel), null);
         builder.setView(view);
         return builder.create();

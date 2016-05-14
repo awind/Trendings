@@ -72,6 +72,7 @@
                android:textColor="@color/text_color_gray"
                android:text="@string/repo_item_built"
                android:paddingStart="16sp"
+               android:paddingEnd="8dp"
                android:gravity="bottom"
                android:layout_centerVertical="true"
                android:layout_width="wrap_content"

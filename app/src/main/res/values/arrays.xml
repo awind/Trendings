@@ -25,4 +25,14 @@
         <item>HTML</item>
     </string-array>
 
+    <string-array name="lang_since_array">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+
+    <string-array name="dev_since_array">
+        <item>Daily</item>
+        <item>Weekly</item>
+    </string-array>
 </resources>

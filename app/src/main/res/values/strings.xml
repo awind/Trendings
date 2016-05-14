@@ -32,5 +32,6 @@
 
     <string name="fragment_search_repos_hint">Search repoitiories...</string>
     <string name="fragment_search_users_hint">Search users...</string>
+    <string name="fragment_repo_choose_since">Choose...</string>
 
 </resources>
