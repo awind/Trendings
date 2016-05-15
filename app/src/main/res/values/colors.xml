@@ -16,9 +16,9 @@
     <color name="bg_main">#EEEEEC</color>
 
     <!-- bottom bar -->
-    <color name="bottom_bar_tab_0">#7B1FA2</color>
+    <color name="bottom_bar_tab_0">#3F51B5</color>
     <color name="bottom_bar_tab_1">#8B4513</color>
-    <color name="bottom_bar_tab_2">#FF5252</color>
-    <color name="bottom_bar_tab_3">#2196F3</color>
+    <color name="bottom_bar_tab_2">#F44336</color>
+    <color name="bottom_bar_tab_3">#009688</color>
 
 </resources>
