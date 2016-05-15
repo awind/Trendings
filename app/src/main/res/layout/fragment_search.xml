@@ -24,7 +24,7 @@
         android:layout_below="@id/appbar"
         app:tabBackground="@color/colorPrimary"
         app:tabIndicatorColor="@color/bottom_bar_tab_2"
-        app:tabTextColor="@color/text_color_black"
+        app:tabTextColor="@color/tab_text_color"
         app:tabSelectedTextColor="@color/white"
         android:elevation="4dp"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"

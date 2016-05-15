@@ -17,23 +17,47 @@ repositories {
 apply plugin: 'android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
+def configPropertiesFile = rootProject.file("config.properties")
+def configProperties = new Properties()
+configProperties.load(new FileInputStream(configPropertiesFile))
+
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.awind.trendings"
+        applicationId configProperties['applicationId']
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 5
-        versionName "1.2"
+        versionCode Integer.valueOf(configProperties['versionCode'])
+        versionName configProperties['versionName']
     }
+
+
+    signingConfigs {
+        debug{
+            storeFile file('trending.jks')
+            storePassword configProperties['storePassword']
+            keyAlias configProperties['keyAlias']
+            keyPassword configProperties['keyPassword']
+        }
+        release {
+            storeFile file('trending.jks')
+            storePassword configProperties['storePassword']
+            keyAlias configProperties['keyAlias']
+            keyPassword configProperties['keyPassword']
+        }
+    }
+
     buildTypes {
         debug {
+            signingConfig signingConfigs.debug
             buildConfigField("boolean", "LOG_DEBUG", "true")
             minifyEnabled false
         }
         release {
+            signingConfig signingConfigs.release
             buildConfigField("boolean", "LOG_DEBUG", "false")
             shrinkResources true
             minifyEnabled true
@@ -57,6 +81,7 @@ android {
 ext {
     supportLibVersion = '23.2.1'
     retrofitVersion = '2.0.2'
+    leakcanaryVersion = '1.4-beta2'
 }
 
 dependencies {
@@ -85,9 +110,9 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0'
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    debugCompile "com.squareup.leakcanary:leakcanary-android:${leakcanaryVersion}"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryVersion}"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryVersion}"
 
     compile 'com.google.dagger:dagger:2.0'
     apt 'com.google.dagger:dagger-compiler:2.0'

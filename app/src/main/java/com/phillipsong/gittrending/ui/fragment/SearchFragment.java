@@ -15,6 +15,7 @@
  */
 package com.phillipsong.gittrending.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.phillipsong.gittrending.R;
 import com.phillipsong.gittrending.ui.adapter.SectionsPagerAdapter;
@@ -103,6 +105,11 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
         switch (mCurrentTabPosition) {
             case 0:
                 mRepoSearchFragment.search(query);

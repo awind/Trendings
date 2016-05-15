@@ -43,3 +43,4 @@ gradle/
 gradlew
 gradlew.bat
 app/fabric.properties
+config.properties

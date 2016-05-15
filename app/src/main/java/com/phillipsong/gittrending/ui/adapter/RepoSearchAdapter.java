@@ -17,6 +17,7 @@ package com.phillipsong.gittrending.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,8 +95,15 @@ public class RepoSearchAdapter extends RecyclerView.Adapter<RepoSearchAdapter.Re
                     .fitCenter()
                     .into(mRepoIcon);
             mRepoTitle.setText(repo.getFullName());
+            if (TextUtils.isEmpty(repo.getDescription())) {
+                mRepoDesc.setVisibility(View.GONE);
+            }
             mRepoDesc.setText(repo.getDescription());
-            mRepoLang.setText(repo.getLanguage());
+            if (TextUtils.isEmpty(repo.getLanguage())) {
+                mRepoLang.setText(R.string.fragment_repo_search_lang_unkown);
+            } else {
+                mRepoLang.setText(repo.getLanguage());
+            }
             mRepoStars.setText(String.valueOf(repo.getStars()));
         }
     }

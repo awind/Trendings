@@ -79,7 +79,6 @@ public class RepoSearchFragment extends BaseFragment implements OnItemClickListe
         if (mCurrentPage == 1) {
             mRepoList.clear();
         }
-        Log.d(TAG, "action1: " + mCurrentPage);
         mCurrentPage += 1;
         mRepoList.addAll(items);
         mAdapter.notifyDataSetChanged();

@@ -22,8 +22,8 @@
     </style>
 
     <style name="SearchViewTheme" >
-        <item name="colorControlActivated">@color/bottom_bar_tab_0</item>
-        <item name="colorControlNormal">@color/bottom_bar_tab_0</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
 
     <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
