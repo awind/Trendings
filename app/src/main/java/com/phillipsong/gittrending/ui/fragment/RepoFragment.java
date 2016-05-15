@@ -104,7 +104,6 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, V
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         mLanguage = mSharedPreferences.getString(Constants.REPO_LANG_KEY, "All");
         mSince = "Daily";
     }
@@ -186,14 +185,6 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, V
         Answers.getInstance().logContentView(new ContentViewEvent()
                 .putContentName(repo.getUrl())
                 .putContentType(TAG));
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        Log.d("click" , "inside the on create");
-
-        inflater.inflate(R.menu.menu_main, menu);
     }
 
     @Override
