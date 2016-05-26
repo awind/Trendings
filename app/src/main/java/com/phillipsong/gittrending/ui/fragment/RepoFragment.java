@@ -150,8 +150,11 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, V
                 .compose(bindToLifecycle())
                 .observeOn(Schedulers.io())
                 .flatMap(aVoid -> mTrendingApi.getTrending(mLanguage.toLowerCase(), mSince.toLowerCase()))
+                .retry(2)
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(error -> mSwipeRefreshLayout.setRefreshing(false))
                 .doOnNext(aVoid -> mSwipeRefreshLayout.setRefreshing(false))
+                .doOnCompleted(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .retry()
                 .flatMap(response -> Observable.just(response.getItems()))
                 .subscribe(mUpdateAction, mThrowableAction);
@@ -162,6 +165,7 @@ public class RepoFragment extends BaseFragment implements OnItemClickListener, V
         mSince = since;
         mTrendingApi.getTrending(mLanguage.toLowerCase(), mSince.toLowerCase())
                 .compose(bindToLifecycle())
+                .retry(2)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> mSwipeRefreshLayout.setRefreshing(true))

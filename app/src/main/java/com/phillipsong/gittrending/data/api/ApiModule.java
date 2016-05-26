@@ -48,7 +48,9 @@ public class ApiModule {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .retryOnConnectionFailure(true)
-                .connectTimeout(15, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5,TimeUnit.SECONDS)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()

@@ -62,10 +62,7 @@ public class MainActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
 
     private BottomBar mBottomBar;
-    private RepoFragment mRepoFragment;
-    private DeveloperFragment mDevFragment;
-    private SearchFragment mSearchFragment;
-    private SettingsFragment mSettingsFragment;
+    private Fragment mCurrentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,48 +94,22 @@ public class MainActivity extends BaseActivity {
         mBottomBar.setOnTabClickListener(new OnTabClickListener() {
             @Override
             public void onTabSelected(int position) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 switch (position) {
                     case 0:
-                        hideFragment();
-                        if (mRepoFragment == null) {
-                            mRepoFragment = new RepoFragment();
-                            transaction.add(R.id.main_content, mRepoFragment);
-                        } else {
-                            transaction.show(mRepoFragment);
-                        }
+                        initFragment(RepoFragment.class);
                         break;
                     case 1:
-                        hideFragment();
-                        if (mDevFragment == null) {
-                            mDevFragment = new DeveloperFragment();
-                            transaction.add(R.id.main_content, mDevFragment);
-                        } else {
-                            transaction.show(mDevFragment);
-                        }
+                        initFragment(DeveloperFragment.class);
                         break;
                     case 2:
-                        hideFragment();
-                        if (mSearchFragment == null) {
-                            mSearchFragment = new SearchFragment();
-                            transaction.add(R.id.main_content, mSearchFragment);
-                        } else {
-                            transaction.show(mSearchFragment);
-                        }
+                        initFragment(SearchFragment.class);
                         break;
                     case 3:
-                        hideFragment();
-                        if (mSettingsFragment == null) {
-                            mSettingsFragment = new SettingsFragment();
-                            transaction.add(R.id.main_content, mSettingsFragment);
-                        } else {
-                            transaction.show(mSettingsFragment);
-                        }
+                        initFragment(SettingsFragment.class);
                         break;
                     default:
                         break;
                 }
-                transaction.commit();
             }
 
             @Override
@@ -148,17 +119,31 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void hideFragment() {
+    private void initFragment(Class clazz) {
+        String tag = clazz.getSimpleName();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        if (fragments == null) {
-            return;
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (fragment == null) {
+            try {
+                fragment = (Fragment) clazz.newInstance();
+                transaction.add(R.id.main_content, fragment, tag);
+                if (mCurrentFragment != null) {
+                    transaction.hide(mCurrentFragment);
+                }
+                transaction.commit();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            transaction.show(fragment)
+                    .hide(mCurrentFragment)
+                    .commit();
         }
-        for (Fragment fragment : fragments) {
-            transaction.hide(fragment);
-        }
-        transaction.commit();
+        mCurrentFragment = fragment;
     }
+
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {

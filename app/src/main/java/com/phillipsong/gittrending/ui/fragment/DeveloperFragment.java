@@ -24,6 +24,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,8 +142,11 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
                 .compose(bindToLifecycle())
                 .observeOn(Schedulers.io())
                 .flatMap(aVoid -> mTrendingApi.getDevelopers(mLanguage.toLowerCase(), mSince.toLowerCase()))
+                .retry(2)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aVoid -> mSwipeRefreshLayout.setRefreshing(false))
+                .doOnError(error -> mSwipeRefreshLayout.setRefreshing(false))
+                .doOnCompleted(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .retry()
                 .flatMap(developers -> Observable.just(developers.getItems()))
                 .subscribe(mUpdateAction, mThrowableAction);
@@ -153,6 +157,7 @@ public class DeveloperFragment extends BaseFragment implements OnItemClickListen
         mSince = since;
         mTrendingApi.getDevelopers(mLanguage.toLowerCase(), mSince.toLowerCase())
                 .compose(bindToLifecycle())
+                .retry(2)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> mSwipeRefreshLayout.setRefreshing(true))
